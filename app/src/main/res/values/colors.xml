@@ -6,4 +6,8 @@
     <color name="bg">#283344</color>
     <color name="textColor">#FFFFFF</color>
     <color name="tra">#00000000</color>
+    <color name="black_semi_transparent">#B2000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="fab_pressed_main">#3EBBDB</color>
+    <color name="fab_pressed_son">#1C8D87</color>
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -24,12 +25,53 @@
 
     <include layout="@layout/content_main" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/multiple_actions_down"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@mipmap/eb" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end|bottom"
+        fab:fab_addButtonColorNormal="@color/fab_pressed_son"
+        fab:fab_addButtonColorPressed="@color/fab_pressed_main"
+        fab:fab_addButtonSize="normal"
+        fab:fab_addButtonPlusIconColor="@color/white"
+        fab:fab_expandDirection="up"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        android:layout_marginTop="@dimen/d_20dp"
+        android:layout_marginRight="@dimen/d_20dp"
+        android:layout_marginEnd="@dimen/d_20dp"
+        android:layout_marginBottom="@dimen/d_20dp">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/button_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_icon="@mipmap/history"
+            fab:fab_colorNormal="@color/fab_pressed_son"
+            fab:fab_colorPressed="@color/fab_pressed_main"
+            fab:fab_size="mini"
+            fab:fab_title="历史"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/button_gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_title="网络视频"
+            fab:fab_icon="@mipmap/ee"
+            fab:fab_colorNormal="@color/fab_pressed_son"
+            fab:fab_colorPressed="@color/fab_pressed_main"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_enable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_title="刷新"
+            fab:fab_icon="@mipmap/refresh"
+            fab:fab_colorNormal="@color/fab_pressed_son"
+            fab:fab_colorPressed="@color/fab_pressed_main"/>
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </android.support.design.widget.CoordinatorLayout>
