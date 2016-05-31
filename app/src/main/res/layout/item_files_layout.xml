@@ -14,7 +14,7 @@
             android:layout_height="@dimen/d_100dp"
             android:layout_margin="@dimen/d_10dp"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/fo"/>
+            android:src="@mipmap/filesystem_icon_folder"/>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

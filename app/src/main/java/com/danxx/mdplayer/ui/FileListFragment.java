@@ -69,7 +69,7 @@ public class FileListFragment extends Fragment {
                 filesListView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        refreshLayout.setRefreshing(false);
+//                        refreshLayout.setRefreshing(false);
                     }
                 },3000);
             }
