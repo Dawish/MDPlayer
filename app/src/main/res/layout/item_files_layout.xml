@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:background="@color/bg"
+    android:layout_height="@dimen/d_160dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="@dimen/d_100dp"
+            android:layout_height="@dimen/d_100dp"
+            android:layout_margin="@dimen/d_10dp"
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/fo"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|left"
+            android:layout_margin="@dimen/d_10dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvPath"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/s_30sp"
+                android:textColor="@color/textColor"
+                android:text="VideoDownload"/>
+            <TextView
+                android:id="@+id/tvCount"
+                android:layout_marginTop="@dimen/d_10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/s_24sp"
+                android:textColor="@color/textColor"
+                android:text="3个视频文件"/>
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_alignParentBottom="true"
+        android:background="#3F526B"></View>
+</RelativeLayout>

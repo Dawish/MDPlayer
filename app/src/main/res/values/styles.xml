@@ -1,0 +1,32 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="preferenceTheme">@style/Preference_Text</item>
+        <item name="android:actionMenuTextColor">@color/textColor</item>
+        <item name="actionButtonStyle">@style/Widget.App.ActionButton</item>
+    </style>
+
+    <style name="Widget.App.ActionButton" parent="@style/Widget.AppCompat.ActionButton">
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Preference_Text" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?android:attr/textColorHighlight</item>
+    </style>
+
+</resources>
