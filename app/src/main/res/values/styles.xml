@@ -34,4 +34,14 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="FullscreenTheme" parent="Theme.App.NoActionBar">
+    </style>
+
+    <style name="Theme.App.NoActionBar" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="actionButtonStyle">@style/Widget.App.ActionButton</item>
+    </style>
 </resources>

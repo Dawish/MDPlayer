@@ -1,4 +1,4 @@
-package com.danxx.mdplayer;
+package com.danxx.mdplayer.application;
 
 import android.app.Application;
 import android.content.Context;

@@ -12,7 +12,7 @@ public class FileBean implements Serializable{
     /**文件夹里有多少个视频文件**/
     public int count;
     private static final long serialVersionUID = 1L;
-
+    public String name;
     public FileBean() {
     }
 
@@ -21,4 +21,9 @@ public class FileBean implements Serializable{
         this.count = count;
     }
 
+    public FileBean(String path, String name, int count) {
+        this.path = path;
+        this.name = name;
+        this.count = count;
+    }
 }

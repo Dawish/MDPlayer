@@ -11,6 +11,14 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    lintOptions {
+        abortOnError false
+    }
+
+    dexOptions {
+        preDexLibraries = false
+        javaMaxHeapSize "8g"
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -30,4 +38,6 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.3.0'
     compile 'com.takisoft.fix:preference-v7:23.4.0.4'
     compile 'com.getbase:floatingactionbutton:1.10.1'
+    compile project(':ijkplayer-exo')
+    compile project(':ijkplayer-java')
 }

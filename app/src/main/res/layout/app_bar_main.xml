@@ -60,6 +60,7 @@
             android:layout_height="wrap_content"
             fab:fab_title="网络视频"
             fab:fab_icon="@mipmap/ee"
+            fab:fab_size="mini"
             fab:fab_colorNormal="@color/fab_pressed_son"
             fab:fab_colorPressed="@color/fab_pressed_main"/>
 
@@ -69,6 +70,7 @@
             android:layout_height="wrap_content"
             fab:fab_title="刷新"
             fab:fab_icon="@mipmap/refresh"
+            fab:fab_size="mini"
             fab:fab_colorNormal="@color/fab_pressed_son"
             fab:fab_colorPressed="@color/fab_pressed_main"/>
 

@@ -169,7 +169,7 @@ public class FileListFragment extends Fragment {
                     }
                     /**当前文件夹下包含有视频**/
                     if(videoCount > 0){
-                        fileBeans.add(new FileBean(f.getPath() ,videoCount));
+                        fileBeans.add(new FileBean(f.getPath() ,f.getName(),videoCount));
                     }
                 }
             }else{
@@ -236,7 +236,7 @@ public class FileListFragment extends Fragment {
         @Override
         protected void bindData(BaseRecyclerViewHolder holder, int position) {
             MyViewHolder viewHolder = (MyViewHolder)holder;
-            viewHolder.tvPath.setText(getItemData(position).path);
+            viewHolder.tvPath.setText(getItemData(position).name);
             viewHolder.tvCount.setText(getItemData(position).count+"个视频文件");
         }
 

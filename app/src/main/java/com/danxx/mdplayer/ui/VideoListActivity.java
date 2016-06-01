@@ -36,6 +36,7 @@ public class VideoListActivity extends AppCompatActivity {
     private LinearLayoutManager mLayoutManager;
     private RecyclerView videoListView;
     private File rootFile;
+    private TextView tvFilePath;
 
     /**包含有视频文件夹集合**/
     private List<VideoBean> videoBeans = new ArrayList<VideoBean>();
@@ -65,23 +66,33 @@ public class VideoListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         path = intent.getStringExtra("path");
         mAdapter = new VideoListAdapter();
+        tvFilePath = (TextView) findViewById(R.id.tvFilePath);
         videoListView = (RecyclerView) findViewById(R.id.videoListView);
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         videoListView.setLayoutManager(mLayoutManager);
         videoListView.setAdapter(mAdapter);
         if(path != null && !TextUtils.isEmpty(path)){
+            tvFilePath.setText(path);
             initData();
         }
     }
 
     private void initData(){
         rootFile = new File(path);
+
         handlerThread = new HandlerThread("ReadVideoFileTask");
         handlerThread.start();
         readTaskHandler = new Handler(handlerThread.getLooper());
         ReadVideoFileTask readVideoFileTask = new ReadVideoFileTask(mainHandler);
         readTaskHandler.post(readVideoFileTask);
+
+        mAdapter.setOnItemClickListener(new BaseRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, Object data) {
+                VideoActivity.intentTo(VideoListActivity.this , ((VideoBean)data).path ,((VideoBean)data).name);
+            }
+        });
     }
 
     class ReadVideoFileTask implements Runnable{
@@ -108,7 +119,8 @@ public class VideoListActivity extends AppCompatActivity {
                             eachAllMedias(file);
                         } else if (file.exists() && file.canRead() && FileUtils.isVideo(file)) {
                             String name = file.getName();
-                            String size = FileUtils.showFileSize(file.getTotalSpace());
+                            String size = FileUtils.showFileSize(file.length());
+                            Log.d("danxx" ,"size-->"+size);
                             String path = file.getPath();
                             videoBeans.add(new VideoBean(name , path , size));
                         }

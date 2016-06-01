@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--点击出现的水波纹效果是矩形的 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/bg" />
+</shape>
