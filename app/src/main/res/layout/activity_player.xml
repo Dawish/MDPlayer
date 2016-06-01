@@ -11,7 +11,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#0099cc">
+        android:background="#000000">
 
         <com.danxx.mdplayer.widget.media.IjkVideoView
             android:id="@+id/video_view"

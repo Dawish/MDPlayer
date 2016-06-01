@@ -2,7 +2,6 @@ package com.danxx.mdplayer.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -13,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +24,10 @@ import com.danxx.mdplayer.R;
 import com.danxx.mdplayer.adapter.BaseRecyclerViewAdapter;
 import com.danxx.mdplayer.adapter.BaseRecyclerViewHolder;
 import com.danxx.mdplayer.model.FileBean;
+import com.danxx.mdplayer.module.WasuCacheModule;
 import com.danxx.mdplayer.utils.FileUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,8 +37,6 @@ import java.util.List;
  *视频列表页
  */
 public class FileListFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final int MSG_READ_FINISH = 1;
@@ -43,14 +44,15 @@ public class FileListFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private static final String cacheKey = "MDPlayerCacheData";
+    private String cacheStr="";
     private LinearLayoutManager mLayoutManager;
     private FileListAdapter mAdapter;
     private View rootView;
     private RecyclerView filesListView;
     private SwipeRefreshLayout refreshLayout;
+    private String tempStr;
 
-    private OnFragmentInteractionListener mListener;
     /**包含有视频文件夹集合**/
     private List<FileBean> fileBeans = new ArrayList<FileBean>();
     private HandlerThread handlerThread;
@@ -63,15 +65,14 @@ public class FileListFragment extends Fragment {
                     Toast.makeText(getActivity(), "视频文件读取到了"+ fileBeans.size(), Toast.LENGTH_LONG).show();
                     mAdapter.setData(fileBeans);
                     mAdapter.notifyDataSetChanged();
+                    Gson gson = new Gson();
+                    String cacheStr = gson.toJson(fileBeans);
+                    if(!TextUtils.isEmpty(cacheStr)){
+                        WasuCacheModule.getInstance().put(cacheKey ,cacheStr);
+                    }
                 }else{
                     Toast.makeText(getActivity(), "sorry,没有读取到视频文件!", Toast.LENGTH_LONG).show();
                 }
-                filesListView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-//                        refreshLayout.setRefreshing(false);
-                    }
-                },3000);
             }
             return false;
         }
@@ -101,7 +102,8 @@ public class FileListFragment extends Fragment {
         if(readTaskHandler == null){
             readTaskHandler = new Handler(handlerThread.getLooper());
         }
-        readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
+//        readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
+        tempStr = WasuCacheModule.getInstance().getAsString(cacheKey);
     }
 
     @Override
@@ -132,6 +134,19 @@ public class FileListFragment extends Fragment {
                 getActivity().startActivity(intent);
             }
         });
+        if(tempStr != null && !TextUtils.isEmpty(tempStr)){
+            Gson gson = new Gson();
+            // json转为带泛型的list
+            List<FileBean> dataList = gson.fromJson(tempStr,
+                    new TypeToken<List<FileBean>>() {
+                    }.getType());
+            if(dataList.size()>0){
+                mAdapter.setData(dataList);
+                mAdapter.notifyDataSetChanged();
+            }
+        }else{
+            readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
+        }
     }
 
     class ReadVideoDirectoryTask implements Runnable{
@@ -176,38 +191,6 @@ public class FileListFragment extends Fragment {
                 Log.d("danxx" ,"目录直接为空");
             }
         }
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-        int i=0;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 
     class FileListAdapter extends BaseRecyclerViewAdapter<FileBean>{
