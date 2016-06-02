@@ -164,15 +164,20 @@ public class FileListFragment extends Fragment {
                         FAM.hideMenu(true);
                     } else {
                         //ScrollDown
-                        if(FAM.isOpened()){
+                        if (FAM.isOpened()) {
                             FAM.close(false);
-                        }else{
+                        } else {
                             FAM.showMenu(true);
                         }
                     }
                 }
             }
         });
+    }
+
+    public void closeFAM(){
+        Log.d("danxx" ,"调用关闭");
+        FAM.close(false);
     }
 
     /**

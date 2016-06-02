@@ -59,13 +59,13 @@
         fab:menu_fab_hide_animation="@anim/hide_to_bottom">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/menu_item"
+            android:id="@+id/menu_item2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/fab_add"
             fab:fab_size="mini"
             style="@style/MenuButtonsSmall"
-            fab:fab_label="Menu item 1" />
+            fab:fab_label="历史" />
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_item1"
             android:layout_width="wrap_content"
@@ -73,16 +73,15 @@
             android:src="@mipmap/fab_add"
             fab:fab_size="mini"
             style="@style/MenuButtonsSmall"
-            fab:fab_label="Menu item 1" />
+            fab:fab_label="网络视频" />
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/menu_item2"
+            android:id="@+id/menu_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/fab_add"
             fab:fab_size="mini"
             style="@style/MenuButtonsSmall"
-            fab:fab_label="Menu item 1" />
-
+            fab:fab_label="刷新" />
     </com.github.clans.fab.FloatingActionMenu>
 
 </FrameLayout>

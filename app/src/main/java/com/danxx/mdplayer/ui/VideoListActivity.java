@@ -47,7 +47,6 @@ public class VideoListActivity extends AppCompatActivity {
         public boolean handleMessage(Message msg) {
             if(msg.what == MSG_READ_FINISH){
                 if(videoBeans.size()>0){
-                    Toast.makeText(VideoListActivity.this, "视频文件读取到了" + videoBeans.size(), Toast.LENGTH_LONG).show();
                     mAdapter.setData(videoBeans);
                     mAdapter.notifyDataSetChanged();
                 }else{

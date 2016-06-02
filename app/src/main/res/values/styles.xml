@@ -45,7 +45,7 @@
         <item name="windowNoTitle">true</item>
         <item name="actionButtonStyle">@style/Widget.App.ActionButton</item>
     </style>
-    
+
     <style name="MenuButtonsSmall">
         <item name="fab_colorNormal">@color/fab_pressed_son</item>
         <item name="fab_colorPressed">@color/fab_pressed_son</item>
