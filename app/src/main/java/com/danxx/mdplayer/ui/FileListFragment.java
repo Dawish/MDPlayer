@@ -52,6 +52,7 @@ public class FileListFragment extends Fragment {
     private RecyclerView filesListView;
     private SwipeRefreshLayout refreshLayout;
     private String tempStr;
+    private boolean isRefreshing;
 
     /**包含有视频文件夹集合**/
     private List<FileBean> fileBeans = new ArrayList<FileBean>();
@@ -61,6 +62,7 @@ public class FileListFragment extends Fragment {
         @Override
         public boolean handleMessage(Message msg) {
             if(msg.what == MSG_READ_FINISH){
+                isRefreshing = false;
                 if(fileBeans.size()>0){
                     Toast.makeText(getActivity(), "视频文件读取到了"+ fileBeans.size(), Toast.LENGTH_LONG).show();
                     mAdapter.setData(fileBeans);
@@ -116,11 +118,6 @@ public class FileListFragment extends Fragment {
 
     private void initView(){
         filesListView = (RecyclerView) rootView.findViewById(R.id.filesListview);
-        refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refreshLayout);
-        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
-        refreshLayout.setEnabled(false);
-        refreshLayout.setRefreshing(true);
-
         mAdapter = new FileListAdapter();
         mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
@@ -149,15 +146,26 @@ public class FileListFragment extends Fragment {
         }
     }
 
+    /**
+     * 重新扫描,刷新文件
+     */
+    public void refresh(){
+        if(!isRefreshing){
+            readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
+        }
+    }
+
     class ReadVideoDirectoryTask implements Runnable{
 
         Context mContext;
         Handler mainHandler;
         File f;
         public ReadVideoDirectoryTask(Context context ,Handler handler){
+            isRefreshing =true;
             this.mContext = context;
             this.mainHandler = handler;
             f = Environment.getExternalStorageDirectory();
+            fileBeans.clear();
         }
         @Override
         public void run() {

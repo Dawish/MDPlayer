@@ -2,15 +2,15 @@
 <resources>
     <color name="colorPrimary">#222A37</color>
     <color name="colorPrimaryDark">#222A37</color>
-    <color name="colorAccent">#64C8E2</color>
-    <color name="bg">#283344</color>
-    <color name="textColor">#FFFFFF</color>
+    <color name="colorAccent">#1C8D87</color>
+    <color name="bg">#E1E1E1</color>
+    <color name="textColor">#4D4D4D</color>
     <color name="tra">#00000000</color>
     <color name="black_semi_transparent">#B2000000</color>
     <color name="white">#FFFFFF</color>
-    <color name="fab_pressed_main">#1C8D87</color>
-    <color name="fab_pressed_son">#3EBBDB</color>
-    <color name="ripple_color">#33FFFFFF</color>
+    <color name="fab_pressed_main">#3EBBDB</color>
+    <color name="fab_pressed_son">#1C8D87</color>
+    <color name="ripple_color">#A0A0A0</color>
 
     <color name="ijk_color_blue_main">@color/ijk_color_blue_500</color>
     <color name="ijk_color_blue_50">#E3F2FD</color>

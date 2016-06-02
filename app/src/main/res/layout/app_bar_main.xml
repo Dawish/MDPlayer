@@ -26,7 +26,7 @@
     <include layout="@layout/content_main" />
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:id="@+id/multiple_actions_down"
+        android:id="@+id/FAM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -71,6 +71,7 @@
             fab:fab_title="刷新"
             fab:fab_icon="@mipmap/refresh"
             fab:fab_size="mini"
+            android:onClick="refresh"
             fab:fab_colorNormal="@color/fab_pressed_son"
             fab:fab_colorPressed="@color/fab_pressed_main"/>
 

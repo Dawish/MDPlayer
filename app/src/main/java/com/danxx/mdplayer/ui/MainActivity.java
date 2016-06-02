@@ -13,8 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.danxx.mdplayer.R;
+import com.danxx.mdplayer.eventbus.MyEvent;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 public class MainActivity extends AppCompatActivity
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity
         Resources resource=(Resources)getBaseContext().getResources();
         ColorStateList csl=(ColorStateList)resource.getColorStateList(R.color.navigation_menu_item_color);
         navigationView.setItemTextColor(csl);
+        FAM = (FloatingActionsMenu) findViewById(R.id.FAM);
         listFragment = FileListFragment.newInstance(null, null);
         settingsFragment = SettingsFragment.newInstance(null ,null);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -128,6 +132,25 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void refresh(View v){
+        ((FileListFragment)listFragment).refresh();
+        FAM.collapse();
+    }
+
+    /**
+     * 订阅函数
+     * 运行在UI线程
+     * @param event
+     */
+    public void onEvent(MyEvent event){
+        Toast.makeText(this, event.eventType, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     /**

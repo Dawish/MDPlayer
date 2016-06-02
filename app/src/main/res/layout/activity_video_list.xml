@@ -14,8 +14,8 @@
         android:textSize="@dimen/s_30sp"
         android:padding="@dimen/d_18dp"
         android:text="download/files/mp4"
-        android:background="#27303F"
-        android:textColor="@color/textColor"/>
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="0.1dp"

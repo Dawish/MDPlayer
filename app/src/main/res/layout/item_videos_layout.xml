@@ -52,5 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:layout_alignParentBottom="true"
-        android:background="#3F526B"></View>
+        android:layout_marginLeft="@dimen/d_20dp"
+        android:layout_marginRight="@dimen/d_20dp"
+        android:background="#B4B4B4"></View>
 </RelativeLayout>
