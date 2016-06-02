@@ -120,7 +120,6 @@ public class VideoListActivity extends AppCompatActivity {
                         } else if (file.exists() && file.canRead() && FileUtils.isVideo(file)) {
                             String name = file.getName();
                             String size = FileUtils.showFileSize(file.length());
-                            Log.d("danxx" ,"size-->"+size);
                             String path = file.getPath();
                             videoBeans.add(new VideoBean(name , path , size));
                         }

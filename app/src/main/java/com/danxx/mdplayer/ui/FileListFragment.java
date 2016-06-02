@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +25,7 @@ import com.danxx.mdplayer.adapter.BaseRecyclerViewHolder;
 import com.danxx.mdplayer.model.FileBean;
 import com.danxx.mdplayer.module.WasuCacheModule;
 import com.danxx.mdplayer.utils.FileUtils;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -50,9 +50,10 @@ public class FileListFragment extends Fragment {
     private FileListAdapter mAdapter;
     private View rootView;
     private RecyclerView filesListView;
-    private SwipeRefreshLayout refreshLayout;
+    private FloatingActionMenu FAM;
     private String tempStr;
     private boolean isRefreshing;
+    private int mScrollThreshold = 4;
 
     /**包含有视频文件夹集合**/
     private List<FileBean> fileBeans = new ArrayList<FileBean>();
@@ -118,6 +119,7 @@ public class FileListFragment extends Fragment {
 
     private void initView(){
         filesListView = (RecyclerView) rootView.findViewById(R.id.filesListview);
+        FAM = (FloatingActionMenu) rootView.findViewById(R.id.FAM);
         mAdapter = new FileListAdapter();
         mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
@@ -144,6 +146,33 @@ public class FileListFragment extends Fragment {
         }else{
             readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
         }
+
+        filesListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                boolean isSignificantDelta = Math.abs(dy) > mScrollThreshold;
+                if (isSignificantDelta) {
+                    if (dy > 0) {
+                        //onScrollUp
+                        FAM.close(false);
+                        FAM.hideMenu(true);
+                    } else {
+                        //ScrollDown
+                        if(FAM.isOpened()){
+                            FAM.close(false);
+                        }else{
+                            FAM.showMenu(true);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     /**

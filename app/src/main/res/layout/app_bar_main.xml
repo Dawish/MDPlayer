@@ -25,7 +25,7 @@
 
     <include layout="@layout/content_main" />
 
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
+<!--    <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/FAM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -75,6 +75,6 @@
             fab:fab_colorNormal="@color/fab_pressed_son"
             fab:fab_colorPressed="@color/fab_pressed_main"/>
 
-    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>-->
 
 </android.support.design.widget.CoordinatorLayout>
