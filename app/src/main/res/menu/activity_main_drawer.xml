@@ -18,6 +18,10 @@
             android:id="@+id/nav_manage"
             android:icon="@drawable/recommend_checked"
             android:title="推荐" />
+        <item
+            android:id="@+id/memeda"
+            android:icon="@drawable/recommend_checked"
+            android:title="么么哒" />
     </group>
 
 <!--    <item android:title="Communicate">

@@ -8,11 +8,13 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +56,7 @@ public class FileListFragment extends Fragment {
     private String tempStr;
     private boolean isRefreshing;
     private int mScrollThreshold = 4;
+    private SwipeRefreshLayout refreshLayout;
 
     /**包含有视频文件夹集合**/
     private List<FileBean> fileBeans = new ArrayList<FileBean>();
@@ -73,6 +76,7 @@ public class FileListFragment extends Fragment {
                     if(!TextUtils.isEmpty(cacheStr)){
                         WasuCacheModule.getInstance().put(cacheKey ,cacheStr);
                     }
+                    refreshLayout.setRefreshing(false);
                 }else{
                     Toast.makeText(getActivity(), "sorry,没有读取到视频文件!", Toast.LENGTH_LONG).show();
                 }
@@ -133,20 +137,18 @@ public class FileListFragment extends Fragment {
                 getActivity().startActivity(intent);
             }
         });
-        if(tempStr != null && !TextUtils.isEmpty(tempStr)){
-            Gson gson = new Gson();
-            // json转为带泛型的list
-            List<FileBean> dataList = gson.fromJson(tempStr,
-                    new TypeToken<List<FileBean>>() {
-                    }.getType());
-            if(dataList.size()>0){
-                mAdapter.setData(dataList);
-                mAdapter.notifyDataSetChanged();
+        refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refreshLayout);
+        // 这句话是为了，第一次进入页面的时候显示加载进度条
+        refreshLayout.setProgressViewOffset(true, 0, (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 28, getResources()
+                        .getDisplayMetrics()));
+        refreshLayout.setProgressViewEndTarget(true, 200);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
             }
-        }else{
-            readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
-        }
-
+        });
         filesListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -173,6 +175,20 @@ public class FileListFragment extends Fragment {
                 }
             }
         });
+        /**如果有缓存数据那就先显示缓存数据**/
+        if(tempStr != null && !TextUtils.isEmpty(tempStr)){
+            Gson gson = new Gson();
+            // json转为带泛型的list
+            List<FileBean> dataList = gson.fromJson(tempStr,
+                    new TypeToken<List<FileBean>>() {
+                    }.getType());
+            if(dataList.size()>0){
+                mAdapter.setData(dataList);
+                mAdapter.notifyDataSetChanged();
+            }
+        }else{
+            readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
+        }
     }
 
     public void closeFAM(){
@@ -200,6 +216,7 @@ public class FileListFragment extends Fragment {
             this.mainHandler = handler;
             f = Environment.getExternalStorageDirectory();
             fileBeans.clear();
+            refreshLayout.setRefreshing(true);
         }
         @Override
         public void run() {

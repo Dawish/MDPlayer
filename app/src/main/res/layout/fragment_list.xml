@@ -5,12 +5,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.FileListFragment">
 
-
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/filesListview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
-
+    </android.support.v4.widget.SwipeRefreshLayout>
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/FAM"
         android:layout_width="wrap_content"
@@ -74,14 +77,7 @@
             fab:fab_size="mini"
             style="@style/MenuButtonsSmall"
             fab:fab_label="网络视频" />
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/menu_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/fab_add"
-            fab:fab_size="mini"
-            style="@style/MenuButtonsSmall"
-            fab:fab_label="刷新" />
+
     </com.github.clans.fab.FloatingActionMenu>
 
 </FrameLayout>
