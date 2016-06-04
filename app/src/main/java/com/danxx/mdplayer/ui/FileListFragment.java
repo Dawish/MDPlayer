@@ -1,7 +1,10 @@
 package com.danxx.mdplayer.ui;
 
+import android.annotation.TargetApi;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -9,6 +12,7 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -128,13 +132,15 @@ public class FileListFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         filesListView.setLayoutManager(mLayoutManager);
+        filesListView.setItemAnimator(new DefaultItemAnimator());
         filesListView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(new BaseRecyclerViewAdapter.OnItemClickListener() {
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onItemClick(int position, Object data) {
                 Intent intent = new Intent(getActivity(),VideoListActivity.class);
                 intent.putExtra("path" ,((FileBean)data).path);
-                getActivity().startActivity(intent);
+                getActivity().startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
             }
         });
         refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refreshLayout);
