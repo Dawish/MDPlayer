@@ -16,8 +16,10 @@ android {
     }
 
     dexOptions {
+        incremental true
+        javaMaxHeapSize "4g"
+        //关闭预编译
         preDexLibraries = false
-//        javaMaxHeapSize "8g"
     }
     buildTypes {
         release {
