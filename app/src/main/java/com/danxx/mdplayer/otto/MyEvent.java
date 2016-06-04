@@ -1,4 +1,4 @@
-package com.danxx.mdplayer.eventbus;
+package com.danxx.mdplayer.otto;
 
 /**
  * Created by Danxx on 2016/6/1.
