@@ -4,16 +4,12 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.transition.Explode;
-import android.transition.Slide;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -29,10 +25,15 @@ import com.danxx.mdplayer.adapter.BaseRecyclerViewAdapter;
 import com.danxx.mdplayer.adapter.BaseRecyclerViewHolder;
 import com.danxx.mdplayer.model.VideoBean;
 import com.danxx.mdplayer.utils.FileUtils;
+import com.danxx.mdplayer.utils.RxUtil;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Func1;
 
 public class VideoListActivity extends AppCompatActivity {
     private String path;
@@ -43,24 +44,10 @@ public class VideoListActivity extends AppCompatActivity {
     private File rootFile;
     private TextView tvFilePath;
 
-    /**包含有视频文件夹集合**/
+    /**
+     * 包含有视频文件夹集合
+     **/
     private List<VideoBean> videoBeans = new ArrayList<VideoBean>();
-    private HandlerThread handlerThread;
-    private Handler readTaskHandler;
-    private Handler mainHandler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            if(msg.what == MSG_READ_FINISH){
-                if(videoBeans.size()>0){
-                    mAdapter.setData(videoBeans);
-                    mAdapter.notifyDataSetChanged();
-                }else{
-                    Toast.makeText(VideoListActivity.this, "sorry,没有读取到视频文件!", Toast.LENGTH_LONG).show();
-                }
-            }
-            return false;
-        }
-    });
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -82,70 +69,67 @@ public class VideoListActivity extends AppCompatActivity {
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         videoListView.setLayoutManager(mLayoutManager);
         videoListView.setAdapter(mAdapter);
-        if(path != null && !TextUtils.isEmpty(path)){
+        if (path != null && !TextUtils.isEmpty(path)) {
             tvFilePath.setText(path);
             initData();
         }
     }
 
-    private void initData(){
+    private void initData() {
         rootFile = new File(path);
-
-        handlerThread = new HandlerThread("ReadVideoFileTask");
-        handlerThread.start();
-        readTaskHandler = new Handler(handlerThread.getLooper());
-        ReadVideoFileTask readVideoFileTask = new ReadVideoFileTask(mainHandler);
-        readTaskHandler.post(readVideoFileTask);
-
         mAdapter.setOnItemClickListener(new BaseRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, Object data) {
                 VideoActivity.intentTo(VideoListActivity.this , ((VideoBean)data).path ,((VideoBean)data).name);
             }
         });
+        ReadVideoFileByRxjava();
     }
 
-    class ReadVideoFileTask implements Runnable{
 
-        Handler mainHandler;
-        public ReadVideoFileTask(Handler handler){
-            this.mainHandler = handler;
-        }
-        @Override
-        public void run() {
-            eachAllMedias(rootFile);
-            Log.d("danxx", "文件读取完成");
-            Message msg = mainHandler.obtainMessage(MSG_READ_FINISH);
-            msg.sendToTarget();
-        }
-
-        /** 遍历所有文件夹，查找出视频文件 */
-        private void eachAllMedias(File f) {
-            if (f != null && f.exists() && f.isDirectory()) {
-                File[] files = f.listFiles();
-                if (files != null) { //文件夹里面存在文件或者文件夹
-                    for (File file : f.listFiles()) {
-                        if (file.isDirectory()) {
-                            eachAllMedias(file);
-                        } else if (file.exists() && file.canRead() && FileUtils.isVideo(file)) {
-                            String name = file.getName();
-                            String size = FileUtils.showFileSize(file.length());
-                            String path = file.getPath();
-                            videoBeans.add(new VideoBean(name , path , size));
-                        }
+    /**
+     * 参考:http://blog.csdn.net/job_hesc/article/details/46242117
+     */
+    private void ReadVideoFileByRxjava() {
+        Observable.just(rootFile)
+                .flatMap(new Func1<File, Observable<File>>() {
+                    @Override
+                    public Observable<File> call(File file) {
+                        return RxUtil.listFiles(file);
                     }
-                }
-            }else{
-                Log.d("danxx" ,"目录直接为空");
-            }
-        }
-    }
+                })
+                .subscribe(
+                        new Subscriber<File>() {
+                            @Override
+                            public void onCompleted() {
+                                Log.d("danxx", "onCompleted");
+                                if (videoBeans.size() > 0) {
+                                    mAdapter.setData(videoBeans);
+                                    mAdapter.notifyDataSetChanged();
+                                } else {
+                                    Toast.makeText(VideoListActivity.this, "sorry,没有读取到视频文件!", Toast.LENGTH_LONG).show();
+                                }
+                            }
 
+                            @Override
+                            public void onError(Throwable e) {
+                            }
+
+                            @Override
+                            public void onNext(File file) {
+                                String name = file.getName();
+                                String size = FileUtils.showFileSize(file.length());
+                                String path = file.getPath();
+                                videoBeans.add(new VideoBean(name, path, size));
+                                Log.d("danxx", "name--->" + name);
+                            }
+                        }
+                );
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home)
-        {
+        if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         }
@@ -158,7 +142,7 @@ public class VideoListActivity extends AppCompatActivity {
         finish();
     }
 
-    class VideoListAdapter extends BaseRecyclerViewAdapter<VideoBean>{
+    class VideoListAdapter extends BaseRecyclerViewAdapter<VideoBean> {
 
         /**
          * 创建item view
@@ -182,14 +166,15 @@ public class VideoListActivity extends AppCompatActivity {
          */
         @Override
         protected void bindData(BaseRecyclerViewHolder holder, int position) {
-            ((MyViewHolder)holder).tvName.setText(getItemData(position).name);
-            ((MyViewHolder)holder).tvSize.setText(getItemData(position).size);
+            ((MyViewHolder) holder).tvName.setText(getItemData(position).name);
+            ((MyViewHolder) holder).tvSize.setText(getItemData(position).size);
         }
 
-        class MyViewHolder extends BaseRecyclerViewHolder{
+        class MyViewHolder extends BaseRecyclerViewHolder {
             View mView;
             ImageView ivPic;
-            TextView tvName,tvSize,tvlength;
+            TextView tvName, tvSize, tvlength;
+
             public MyViewHolder(View itemView) {
                 super(itemView);
                 ivPic = (ImageView) itemView.findViewById(R.id.ivPic);

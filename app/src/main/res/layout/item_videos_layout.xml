@@ -16,7 +16,7 @@
             android:layout_height="@dimen/d_140dp"
             android:layout_margin="@dimen/d_10dp"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/filesystem_grid_icon_movie"/>
+            android:src="@mipmap/video_bg"/>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -29,6 +29,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/s_30sp"
                 android:textColor="@color/textColor"
+                android:lines="1"
                 android:text="荒野猎人.mp4"/>
             <TextView
                 android:id="@+id/tvSize"
