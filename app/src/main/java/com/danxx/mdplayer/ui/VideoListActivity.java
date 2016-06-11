@@ -98,32 +98,32 @@ public class VideoListActivity extends AppCompatActivity {
                         return RxUtil.listFiles(file);
                     }
                 })
-                .subscribe(
-                        new Subscriber<File>() {
-                            @Override
-                            public void onCompleted() {
-                                Log.d("danxx", "onCompleted");
-                                if (videoBeans.size() > 0) {
-                                    mAdapter.setData(videoBeans);
-                                    mAdapter.notifyDataSetChanged();
-                                } else {
-                                    Toast.makeText(VideoListActivity.this, "sorry,没有读取到视频文件!", Toast.LENGTH_LONG).show();
-                                }
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                            }
-
-                            @Override
-                            public void onNext(File file) {
-                                String name = file.getName();
-                                String size = FileUtils.showFileSize(file.length());
-                                String path = file.getPath();
-                                videoBeans.add(new VideoBean(name, path, size));
-                                Log.d("danxx", "name--->" + name);
-                            }
+            .subscribe(
+                new Subscriber<File>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d("danxx", "onCompleted");
+                        if (videoBeans.size() > 0) {
+                            mAdapter.setData(videoBeans);
+                            mAdapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(VideoListActivity.this, "sorry,没有读取到视频文件!", Toast.LENGTH_LONG).show();
                         }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(File file) {
+                        String name = file.getName();
+                        String size = FileUtils.showFileSize(file.length());
+                        String path = file.getPath();
+                        videoBeans.add(new VideoBean(name, path, size));
+                        Log.d("danxx", "name--->" + name);
+                    }
+                }
                 );
     }
 
