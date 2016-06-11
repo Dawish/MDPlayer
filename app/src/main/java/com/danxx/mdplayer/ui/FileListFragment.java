@@ -128,6 +128,7 @@ public class FileListFragment extends Fragment {
     private void initView(){
         filesListView = (RecyclerView) rootView.findViewById(R.id.filesListview);
         FAM = (FloatingActionMenu) rootView.findViewById(R.id.FAM);
+        FAM.hideMenu(false);
         mAdapter = new FileListAdapter();
         mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
@@ -195,6 +196,13 @@ public class FileListFragment extends Fragment {
         }else{
             readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
         }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+               FAM.showMenu(true);
+            }
+        },300);
     }
 
     public void closeFAM(){
