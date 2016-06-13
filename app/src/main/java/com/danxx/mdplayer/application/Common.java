@@ -11,6 +11,8 @@ public class Common {
     /**eventbus的显示Action消息类型**/
     public static final int EventBusType_Show = 3;
 
+    /**Meizhi API**/
+    public static final String meizhi_api = "http://www.tngou.net/";
     /**图片分类**/
     public static final String img_classify = "http://www.tngou.net/tnfs/api/classify";
     /**图片列表**/

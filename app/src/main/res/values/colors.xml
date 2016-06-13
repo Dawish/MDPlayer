@@ -25,5 +25,7 @@
     <color name="ijk_color_blue_900">#0D47A1</color>
 
     <color name="ijk_transparent_dark">#77000000</color>
+    <color name="colorOverlay">#50ffffff</color>
+    <color name="transparent">#00000000</color>
 
 </resources>

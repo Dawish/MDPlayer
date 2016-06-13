@@ -14,7 +14,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
-import android.transition.Slide;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -23,7 +22,7 @@ import com.danxx.mdplayer.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private Fragment listFragment ,settingsFragment ,aboutFragment;
+    private Fragment listFragment ,settingsFragment ,aboutFragment ,meizhiFragment;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -55,10 +54,13 @@ public class MainActivity extends AppCompatActivity
         listFragment = FileListFragment.newInstance(null, null);
         settingsFragment = SettingsFragment.newInstance(null ,null);
         aboutFragment = AboutFragment.newInstance(null ,null);
+        meizhiFragment = MeizhiFragment.newInstance(null ,null);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.contentLayout , listFragment ,listFragment.getClass().getSimpleName());
         transaction.add(R.id.contentLayout , settingsFragment ,settingsFragment.getClass().getSimpleName());
         transaction.hide(settingsFragment);
+        transaction.add(R.id.contentLayout , meizhiFragment ,meizhiFragment.getClass().getSimpleName());
+        transaction.hide(meizhiFragment);
         transaction.add(R.id.contentLayout, aboutFragment, aboutFragment.getClass().getSimpleName());
         transaction.hide(aboutFragment);
         getSupportActionBar().setTitle("目录");
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.hide(listFragment).hide(settingsFragment).hide(aboutFragment);
+        transaction.hide(listFragment).hide(settingsFragment).hide(aboutFragment).hide(meizhiFragment);
         if (id == R.id.nav_camera) {
             getSupportActionBar().setTitle("目录");
             transaction.show(listFragment).commit();
@@ -112,9 +114,8 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setTitle("关于");
             transaction.show(aboutFragment).commit();
         } else if (id == R.id.nav_manage) {
-            /**************************************************/
-            getSupportActionBar().setTitle("推荐");
-            transaction.show(listFragment).commit();
+            getSupportActionBar().setTitle("妹纸");
+            transaction.show(meizhiFragment).commit();
         }
         /*else if (id == R.id.nav_share) {
 

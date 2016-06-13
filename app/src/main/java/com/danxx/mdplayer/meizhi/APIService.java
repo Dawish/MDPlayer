@@ -1,6 +1,8 @@
 package com.danxx.mdplayer.meizhi;
 
 
+import com.danxx.mdplayer.model.MeizhiClassify;
+
 import retrofit.Call;
 import retrofit.http.GET;
 import retrofit.http.Query;
@@ -18,4 +20,7 @@ public interface APIService {
      */
     @GET("weather")
     Observable<Weather> getWeatherData(@Query("cityname") String cityname, @Query("key") String apiKey);
+
+    @GET("tnfs/api/classify")
+    Observable<MeizhiClassify> getMeizhiClassify();
 }
