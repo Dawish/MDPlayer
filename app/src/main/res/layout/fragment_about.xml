@@ -1,13 +1,20 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     tools:context="com.danxx.mdplayer.ui.AboutFragment">
-
-    <!-- TODO: Update blank fragment layout -->
+    <ImageView
+        android:layout_width="@dimen/d_100dp"
+        android:layout_height="@dimen/d_120dp"
+        android:layout_marginTop="@dimen/d_100dp"
+        android:src="@mipmap/icon_about"/>
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="关于作者" />
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/d_20dp"
+        android:text="Version:1.1.2" />
 
-</FrameLayout>
+</LinearLayout>

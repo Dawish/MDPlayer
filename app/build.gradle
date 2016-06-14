@@ -42,12 +42,13 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.4.0'
     compile 'com.takisoft.fix:preference-v7:23.4.0.4'
     compile 'com.github.clans:fab:1.6.4'
-    //Rxjava + Rxandroid + retrofit
+    //retrofit
     compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
     compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
     compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
-
+    //Rxjava + Rxandroid
     compile 'io.reactivex:rxandroid:1.2.0'
     compile 'io.reactivex:rxjava:1.1.5'
-
+    //blurview
+    compile 'com.eightbitlab:blurview:1.0.2'
 }
