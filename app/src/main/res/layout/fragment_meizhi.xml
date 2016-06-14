@@ -11,19 +11,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <eightbitlab.com.blurview.BlurView
-        android:id="@+id/blurView"
-        android:layout_width="match_parent"
-        android:layout_gravity="top"
-        android:layout_height="wrap_content"
-        app:blurOverlayColor="@color/colorOverlay">
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/d_60dp"
-            android:background="@android:color/transparent"/>
+            android:layout_height="@dimen/d_100dp"
+            app:tabIndicatorColor="@color/colorAccent"
+            android:layout_gravity="top"
+            app:tabSelectedTextColor="@color/colorAccent"
+            app:tabTextColor="@color/textColor"
+            app:tabMode="scrollable"
+            android:background="@color/white44"/>
 
-    </eightbitlab.com.blurview.BlurView>
 
 </FrameLayout>

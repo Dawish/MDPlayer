@@ -9,7 +9,7 @@ import retrofit.http.Query;
 import rx.Observable;
 
 /**
- * Created by Zhk on 2015/12/20.
+ * Created by danxingxi on 2016/06/13.
  */
 public interface APIService {
     @GET("weather")

@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity
         listFragment = FileListFragment.newInstance(null, null);
         settingsFragment = SettingsFragment.newInstance(null ,null);
         aboutFragment = AboutFragment.newInstance(null ,null);
-        meizhiFragment = MeizhiFragment.newInstance(null ,null);
+        meizhiFragment = MeizhiClassifyFragment.newInstance(null, null);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.contentLayout , listFragment ,listFragment.getClass().getSimpleName());
         transaction.add(R.id.contentLayout , settingsFragment ,settingsFragment.getClass().getSimpleName());
