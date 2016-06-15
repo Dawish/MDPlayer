@@ -7,6 +7,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +20,11 @@ import com.danxx.mdplayer.adapter.BaseRecyclerViewHolder;
 import com.danxx.mdplayer.application.Common;
 import com.danxx.mdplayer.meizhi.APIService;
 import com.danxx.mdplayer.model.MeizhiList;
+import com.danxx.mdplayer.module.WasuCacheModule;
 import com.danxx.mdplayer.utils.RetrofitUtil;
 import com.danxx.mdplayer.widget.SpaceItemDecoration;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -41,7 +45,10 @@ public class MeizhiListFragment extends Fragment {
     /**图片分类id**/
     private int id;
     private RecyclerView listRecyclerView;
-
+    private static final String cacheKey = "MeizhiListCacheData";
+    private String cacheStr = "";
+    private boolean inited = false;
+    private Gson gson = new Gson();
     private View rootView;
     private List<MeizhiList.TngouEntity> mData = new ArrayList<MeizhiList.TngouEntity>();
     private MyAdapter mAdapter;
@@ -50,8 +57,6 @@ public class MeizhiListFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     */
     public static MeizhiListFragment newInstance(int id) {
         MeizhiListFragment fragment = new MeizhiListFragment();
         Bundle args = new Bundle();
@@ -66,6 +71,8 @@ public class MeizhiListFragment extends Fragment {
         if (getArguments() != null) {
             id = getArguments().getInt(ARG_PARAM);
         }
+        /**先从缓存获取数据**/
+        cacheStr = WasuCacheModule.getInstance().getAsString(String.valueOf(id));
     }
 
     @Override
@@ -87,16 +94,26 @@ public class MeizhiListFragment extends Fragment {
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.d_10dp);
         listRecyclerView.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
         listRecyclerView.setAdapter(mAdapter);
-        fetchDataByRxjava();
         mAdapter.setOnItemClickListener(new BaseRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, Object data) {
                 Intent intent = new Intent();
-                intent.putExtra("url" ,((MeizhiList.TngouEntity)data).getImg());
-                intent.setClass(getActivity() ,MeizhiDetailActivity.class);
+                intent.putExtra("url", ((MeizhiList.TngouEntity) data).getImg());
+                intent.setClass(getActivity(), MeizhiDetailActivity.class);
                 startActivity(intent);
             }
         });
+        if(cacheStr!=null && !TextUtils.isEmpty(cacheStr)){  //要是缓存中数据就使用缓存中的数据显示
+            mData = gson.fromJson(cacheStr , new TypeToken<List<MeizhiList.TngouEntity>>() {}.getType());
+            if(mData != null && mData.size()>0){
+                mAdapter.setData(mData);
+                mAdapter.notifyDataSetChanged();
+                inited = true;
+            }
+        }else{
+            inited = false;
+        }
+        fetchDataByRxjava();
     }
 
     /**
@@ -124,10 +141,23 @@ public class MeizhiListFragment extends Fragment {
             @Override
             public void onNext(MeizhiList meizhiList) {
                 if (meizhiList != null && meizhiList.getTngou().size() > 0) {
-                    mData = meizhiList.getTngou();
-                    Log.d("danxx", "list data size-->" + mData.size());
-                    mAdapter.setData(mData);
-                    mAdapter.notifyDataSetChanged();
+                    if(!inited){  //缓存中没有数据就显示类容保存数据
+                        mData = null;
+                        mData = meizhiList.getTngou();
+                        mAdapter.setData(mData);
+                        mAdapter.notifyDataSetChanged();
+                        String cacheStr = gson.toJson(meizhiList.getTngou());
+                        if(!TextUtils.isEmpty(cacheStr)){
+                            WasuCacheModule.getInstance().remove(String.valueOf(id));
+                            WasuCacheModule.getInstance().put(String.valueOf(id) ,cacheStr);
+                        }
+                    }else{  //缓存中有数据就更新缓存中的数据
+                        String cacheStr = gson.toJson(meizhiList.getTngou());
+                        if(!TextUtils.isEmpty(cacheStr)){
+                            WasuCacheModule.getInstance().remove(String.valueOf(id));
+                            WasuCacheModule.getInstance().put(String.valueOf(id) ,cacheStr);
+                        }
+                    }
                 }
             }
         });

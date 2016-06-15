@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,10 @@ import com.danxx.mdplayer.adapter.FragmentAdapter;
 import com.danxx.mdplayer.application.Common;
 import com.danxx.mdplayer.meizhi.APIService;
 import com.danxx.mdplayer.model.MeizhiClassify;
+import com.danxx.mdplayer.module.WasuCacheModule;
 import com.danxx.mdplayer.utils.RetrofitUtil;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,14 +39,16 @@ public class MeizhiClassifyFragment extends Fragment{
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
     private String mParam2;
-
+    private static final String cacheKey = "MeizhiClassifyCacheData";
+    private String cacheStr = "";
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private BlurView blurView;
     private View rootView;
-
+    private boolean inited = false;
     private List<MeizhiClassify.TngouEntity> mData = new ArrayList<MeizhiClassify.TngouEntity>();
     private List<String> titles = new ArrayList<>();
+    private Gson gson = new Gson();
     public MeizhiClassifyFragment() {
         // Required empty public constructor
     }
@@ -65,6 +71,8 @@ public class MeizhiClassifyFragment extends Fragment{
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        /**先从缓存获取数据**/
+        cacheStr = WasuCacheModule.getInstance().getAsString(cacheKey);
     }
 
     @Override
@@ -73,19 +81,32 @@ public class MeizhiClassifyFragment extends Fragment{
         rootView = inflater.inflate(R.layout.fragment_meizhi, container, false);
         initView();
 //        setupBlurView();
+        initData();
         return rootView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        fetchDataByRxjava();
     }
 
     private void initView(){
         viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabLayout);
 //        blurView = (BlurView) rootView.findViewById(R.id.blurView);
+    }
+
+    private void initData(){
+        if(cacheStr!=null && !TextUtils.isEmpty(cacheStr)){  //要是缓存中数据就使用缓存中的数据显示
+            mData = gson.fromJson(cacheStr , new TypeToken<List<MeizhiClassify.TngouEntity>>() {}.getType());
+            if(mData != null && mData.size()>0){
+                initViewPager();
+                inited = true;
+            }
+        }else{
+            inited = false;
+        }
+        fetchDataByRxjava();
     }
 
     /**
@@ -111,8 +132,22 @@ public class MeizhiClassifyFragment extends Fragment{
                 public void onNext(MeizhiClassify meizhiClassify) {
                     Log.d("danxx", "data size-->" + meizhiClassify.getTngou().size());
                     if (meizhiClassify.getTngou().size() > 0) {
-                        mData = meizhiClassify.getTngou();
-                        initViewPager();
+                        if(!inited){  //缓存中没有数据就显示类容保存数据
+                            mData = null;
+                            mData = meizhiClassify.getTngou();
+                            initViewPager();
+                            String cacheStr = gson.toJson(mData);
+                            if(!TextUtils.isEmpty(cacheStr)){
+                                WasuCacheModule.getInstance().remove(cacheKey);
+                                WasuCacheModule.getInstance().put(cacheKey ,cacheStr);
+                            }
+                        }else{  //缓存中有数据就更新缓存中的数据
+                            String cacheStr = gson.toJson(meizhiClassify.getTngou());
+                            if(!TextUtils.isEmpty(cacheStr)){
+                                WasuCacheModule.getInstance().remove(cacheKey);
+                                WasuCacheModule.getInstance().put(cacheKey ,cacheStr);
+                            }
+                        }
                     }
                 }
             });

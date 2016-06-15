@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.MenuItem;
 
 import com.bm.library.Info;
 import com.bm.library.PhotoView;
@@ -21,7 +22,7 @@ public class MeizhiDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meizhi_detail);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         url = intent.getStringExtra("url");
 
@@ -54,5 +55,20 @@ public class MeizhiDetailActivity extends AppCompatActivity {
         if(!TextUtils.isEmpty(url)){
             Picasso.with(MeizhiDetailActivity.this).load("http://tnfs.tngou.net/image"+url).into(photoView);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

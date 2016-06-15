@@ -51,7 +51,6 @@ public class FileListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private static final String cacheKey = "MDPlayerCacheData";
-    private String cacheStr="";
     private LinearLayoutManager mLayoutManager;
     private FileListAdapter mAdapter;
     private View rootView;
@@ -78,6 +77,7 @@ public class FileListFragment extends Fragment {
                     Gson gson = new Gson();
                     String cacheStr = gson.toJson(fileBeans);
                     if(!TextUtils.isEmpty(cacheStr)){
+                        WasuCacheModule.getInstance().remove(cacheKey);
                         WasuCacheModule.getInstance().put(cacheKey ,cacheStr);
                     }
                     refreshLayout.setRefreshing(false);
