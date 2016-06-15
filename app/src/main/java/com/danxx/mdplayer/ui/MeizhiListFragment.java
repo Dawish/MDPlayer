@@ -124,7 +124,7 @@ public class MeizhiListFragment extends Fragment {
         Retrofit retrofit = RetrofitUtil.createRetrofit(Common.meizhi_api);
         APIService service = retrofit.create(APIService.class);
 
-        Observable<MeizhiList> observable = service.getMeizhiList(String.valueOf(id));
+        Observable<MeizhiList> observable = service.getMeizhiList(String.valueOf(id) ,"1" ,"40");
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
         .subscribe(new Subscriber<MeizhiList>() {
             @Override

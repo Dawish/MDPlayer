@@ -2,20 +2,20 @@ package com.danxx.mdplayer.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
 import com.bm.library.Info;
 import com.bm.library.PhotoView;
 import com.danxx.mdplayer.R;
+import com.danxx.mdplayer.base.BaseActivity;
 import com.squareup.picasso.Picasso;
 
 /**
  * 妹纸图片详情
  * danxingxi
  */
-public class MeizhiDetailActivity extends AppCompatActivity {
+public class MeizhiDetailActivity extends BaseActivity {
     private PhotoView photoView;
     private String url;
     @Override

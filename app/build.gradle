@@ -26,7 +26,35 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug{
+            println 'build - debug'
+        }
     }
+
+    productFlavors {
+        beta{
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE:"beta"]
+        }
+        xiaomi {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE:"xiaomi"]
+        }
+        m360 {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE:"m360"]
+        }
+        wandoujia {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+        }
+        fir {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "fir"]
+        }
+        umeng {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "umeng"]
+        }
+        play {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "play"]
+        }
+    }
+
 }
 
 dependencies {
@@ -55,4 +83,6 @@ dependencies {
     compile 'com.bm.photoview:library:1.4.0'
     //picasso
     compile 'com.squareup.picasso:picasso:2.5.2'
+    //umeng
+    compile 'com.umeng.analytics:analytics:latest.integration'
 }

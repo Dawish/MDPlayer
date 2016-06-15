@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +22,7 @@ import android.widget.Toast;
 import com.danxx.mdplayer.R;
 import com.danxx.mdplayer.adapter.BaseRecyclerViewAdapter;
 import com.danxx.mdplayer.adapter.BaseRecyclerViewHolder;
+import com.danxx.mdplayer.base.BaseActivity;
 import com.danxx.mdplayer.model.VideoBean;
 import com.danxx.mdplayer.utils.FileUtils;
 import com.danxx.mdplayer.utils.RxUtil;
@@ -35,7 +35,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Func1;
 
-public class VideoListActivity extends AppCompatActivity {
+public class VideoListActivity extends BaseActivity {
     private String path;
     private static final int MSG_READ_FINISH = 1;
     private VideoListAdapter mAdapter;

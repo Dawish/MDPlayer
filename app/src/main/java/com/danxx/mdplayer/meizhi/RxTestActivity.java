@@ -1,16 +1,19 @@
 package com.danxx.mdplayer.meizhi;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import com.danxx.mdplayer.R;
 
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
-import com.danxx.mdplayer.R;
-
+/**
+ * Rxjava基础训练
+ */
 public class RxTestActivity extends AppCompatActivity {
 
     @Override
