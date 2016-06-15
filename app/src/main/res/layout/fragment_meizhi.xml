@@ -12,16 +12,16 @@
         android:layout_height="match_parent"/>
 
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/d_100dp"
-            app:tabIndicatorColor="@color/colorAccent"
-            android:layout_gravity="top"
-            app:tabSelectedTextColor="@color/colorAccent"
-            app:tabTextColor="@color/textColor"
-            app:tabMode="scrollable"
-            android:background="@color/white44"/>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d_80dp"
+        app:tabIndicatorColor="@color/colorAccent"
+        android:layout_gravity="top"
+        app:tabSelectedTextColor="@color/colorAccent"
+        app:tabTextColor="@color/textColor"
+        app:tabMode="scrollable"
+        android:background="@color/colorOverlay"/>
 
 
 </FrameLayout>

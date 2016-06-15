@@ -79,7 +79,7 @@ public class MeizhiClassifyFragment extends Fragment{
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        fetchData();
+        fetchDataByRxjava();
     }
 
     private void initView(){
@@ -91,7 +91,7 @@ public class MeizhiClassifyFragment extends Fragment{
     /**
      * 图片分类数据获取
      */
-    private void fetchData(){
+    private void fetchDataByRxjava(){
         Retrofit retrofit = RetrofitUtil.createRetrofit(Common.meizhi_api);
         APIService service = retrofit.create(APIService.class);
         Observable<MeizhiClassify> observable = service.getMeizhiClassify();
@@ -144,7 +144,7 @@ public class MeizhiClassifyFragment extends Fragment{
 
         List<Fragment> fragments = new ArrayList<>();
         for(int i=0;i<titles.size();i++){
-            fragments.add(MeizhiListFragment.newInstance(i+"Url"));
+            fragments.add(MeizhiListFragment.newInstance(mData.get(i).id));
         }
 
         FragmentAdapter mFragmentAdapteradapter =
