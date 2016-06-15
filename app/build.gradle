@@ -51,4 +51,8 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.5'
     //blurview
     compile 'com.eightbitlab:blurview:1.0.2'
+    //photoview
+    compile 'com.bm.photoview:library:1.4.0'
+    //picasso
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }
