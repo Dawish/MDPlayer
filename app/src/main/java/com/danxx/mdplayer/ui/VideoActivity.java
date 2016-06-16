@@ -27,6 +27,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -38,7 +39,6 @@ import android.widget.TextView;
 
 import com.danxx.mdplayer.R;
 import com.danxx.mdplayer.application.Settings;
-import com.danxx.mdplayer.base.BaseActivity;
 import com.danxx.mdplayer.module.RecentMediaStorage;
 import com.danxx.mdplayer.widget.media.AndroidMediaController;
 import com.danxx.mdplayer.widget.media.IjkVideoView;
@@ -47,7 +47,7 @@ import com.danxx.mdplayer.widget.media.MeasureHelper;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 import tv.danmaku.ijk.media.player.misc.ITrackInfo;
 
-public class VideoActivity extends BaseActivity implements TracksFragment.ITrackHolder {
+public class VideoActivity extends AppCompatActivity implements TracksFragment.ITrackHolder {
     private static final String TAG = "VideoActivity";
 
     private String mVideoPath;

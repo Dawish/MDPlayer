@@ -3,7 +3,6 @@ package com.danxx.mdplayer.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.MenuItem;
 
 import com.bm.library.Info;
 import com.bm.library.PhotoView;
@@ -18,10 +17,24 @@ import com.squareup.picasso.Picasso;
 public class MeizhiDetailActivity extends BaseActivity {
     private PhotoView photoView;
     private String url;
+
+    /**
+     * Fill in layout id
+     *
+     * @return layout id
+     */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meizhi_detail);
+    protected int getLayoutId() {
+        return R.layout.activity_meizhi_detail;
+    }
+
+    /**
+     * Initialize the view in the layout
+     *
+     * @param savedInstanceState savedInstanceState
+     */
+    @Override
+    protected void initViews(Bundle savedInstanceState) {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         url = intent.getStringExtra("url");
@@ -29,6 +42,14 @@ public class MeizhiDetailActivity extends BaseActivity {
         photoView = (PhotoView) findViewById(R.id.img);
         // 启用图片缩放功能
         photoView.enable();
+    }
+
+    /**
+     * Initialize the Activity data
+     */
+    @Override
+    protected void initData() {
+
         // 禁用图片缩放功能 (默认为禁用，会跟普通的ImageView一样，缩放功能需手动调用enable()启用)
 //        photoView.disenable();
         // 获取图片信息
@@ -57,18 +78,22 @@ public class MeizhiDetailActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Initialize the toolbar in the layout
+     *
+     * @param savedInstanceState savedInstanceState
+     */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    protected void initToolbar(Bundle savedInstanceState) {
+
     }
 
+    /**
+     * Initialize the View of the listener
+     */
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+    protected void initListeners() {
+
     }
+
 }

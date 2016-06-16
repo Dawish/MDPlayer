@@ -1,9 +1,7 @@
 package com.danxx.mdplayer.ui;
 
-import android.annotation.TargetApi;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -12,10 +10,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.transition.Explode;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 
 import com.danxx.mdplayer.R;
 import com.danxx.mdplayer.base.BaseActivity;
@@ -24,18 +20,24 @@ public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private Fragment listFragment ,settingsFragment ,aboutFragment ,meizhiFragment;
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+
+    /**
+     * Fill in layout id
+     *
+     * @return layout id
+     */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // set Explode enter transition animation for current activity
-        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        getWindow().setEnterTransition(new Explode().setDuration(800));
-        setContentView(R.layout.activity_main);
-        initView();
+    protected int getLayoutId() {
+        return R.layout.activity_main;
     }
 
-    private void initView(){
+    /**
+     * Initialize the view in the layout
+     *
+     * @param savedInstanceState savedInstanceState
+     */
+    @Override
+    protected void initViews(Bundle savedInstanceState) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -67,6 +69,32 @@ public class MainActivity extends BaseActivity
         transaction.commit();
 
         navigationView.getMenu().getItem(0).setChecked(true);
+    }
+
+    /**
+     * Initialize the Activity data
+     */
+    @Override
+    protected void initData() {
+
+    }
+
+    /**
+     * Initialize the toolbar in the layout
+     *
+     * @param savedInstanceState savedInstanceState
+     */
+    @Override
+    protected void initToolbar(Bundle savedInstanceState) {
+
+    }
+
+    /**
+     * Initialize the View of the listener
+     */
+    @Override
+    protected void initListeners() {
+
     }
 
     @Override
@@ -127,24 +155,5 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    /**
-     * 切换显示的fragment
-     * @param fromFragment
-     * @param toFragment
-     */
-    public void switchContent(Fragment fromFragment , Fragment toFragment ) {
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (!toFragment.isAdded()) {    // 先判断是否被add过
-            transaction.hide(fromFragment).add(R.id.contentLayout, toFragment ,toFragment.getClass().getSimpleName()).commit(); // 隐藏当前的fragment，add下一个到Activity中
-        } else {
-            transaction.hide(fromFragment).show(toFragment).commit(); // 隐藏当前的fragment，显示下一个
-        }
-    }
 
 }

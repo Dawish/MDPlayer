@@ -1,20 +1,15 @@
 package com.danxx.mdplayer.ui;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.transition.Explode;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,43 +44,70 @@ public class VideoListActivity extends BaseActivity {
      **/
     private List<VideoBean> videoBeans = new ArrayList<VideoBean>();
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // set Explode enter transition animation for current activity
-        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        getWindow().setEnterTransition(new Explode().setDuration(800));
-        getWindow().setExitTransition(null);
 
-        setContentView(R.layout.activity_video_list);
+    /**
+     * Fill in layout id
+     *
+     * @return layout id
+     */
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_video_list;
+    }
+
+    /**
+     * Initialize the view in the layout
+     *
+     * @param savedInstanceState savedInstanceState
+     */
+    @Override
+    protected void initViews(Bundle savedInstanceState) {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         path = intent.getStringExtra("path");
-        mAdapter = new VideoListAdapter();
         tvFilePath = (TextView) findViewById(R.id.tvFilePath);
         videoListView = (RecyclerView) findViewById(R.id.videoListView);
+        mAdapter = new VideoListAdapter();
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         videoListView.setLayoutManager(mLayoutManager);
         videoListView.setAdapter(mAdapter);
+    }
+
+    /**
+     * Initialize the Activity data
+     */
+    @Override
+    protected void initData() {
         if (path != null && !TextUtils.isEmpty(path)) {
             tvFilePath.setText(path);
-            initData();
+            rootFile = new File(path);
+            ReadVideoFileByRxjava();
         }
     }
 
-    private void initData() {
-        rootFile = new File(path);
+    /**
+     * Initialize the toolbar in the layout
+     *
+     * @param savedInstanceState savedInstanceState
+     */
+    @Override
+    protected void initToolbar(Bundle savedInstanceState) {
+
+    }
+
+    /**
+     * Initialize the View of the listener
+     */
+    @Override
+    protected void initListeners() {
         mAdapter.setOnItemClickListener(new BaseRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, Object data) {
-                VideoActivity.intentTo(VideoListActivity.this , ((VideoBean)data).path ,((VideoBean)data).name);
+                VideoActivity.intentTo(VideoListActivity.this, ((VideoBean) data).path, ((VideoBean) data).name);
             }
         });
-        ReadVideoFileByRxjava();
     }
-
 
     /**
      * 参考:http://blog.csdn.net/job_hesc/article/details/46242117
@@ -98,48 +120,33 @@ public class VideoListActivity extends BaseActivity {
                         return RxUtil.listFiles(file);
                     }
                 })
-            .subscribe(
-                new Subscriber<File>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d("danxx", "onCompleted");
-                        if (videoBeans.size() > 0) {
-                            mAdapter.setData(videoBeans);
-                            mAdapter.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(VideoListActivity.this, "sorry,没有读取到视频文件!", Toast.LENGTH_LONG).show();
+                .subscribe(
+                        new Subscriber<File>() {
+                            @Override
+                            public void onCompleted() {
+                                Log.d("danxx", "onCompleted");
+                                if (videoBeans.size() > 0) {
+                                    mAdapter.setData(videoBeans);
+                                    mAdapter.notifyDataSetChanged();
+                                } else {
+                                    Toast.makeText(VideoListActivity.this, "sorry,没有读取到视频文件!", Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                            }
+
+                            @Override
+                            public void onNext(File file) {
+                                String name = file.getName();
+                                String size = FileUtils.showFileSize(file.length());
+                                String path = file.getPath();
+                                videoBeans.add(new VideoBean(name, path, size));
+                                Log.d("danxx", "name--->" + name);
+                            }
                         }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onNext(File file) {
-                        String name = file.getName();
-                        String size = FileUtils.showFileSize(file.length());
-                        String path = file.getPath();
-                        videoBeans.add(new VideoBean(name, path, size));
-                        Log.d("danxx", "name--->" + name);
-                    }
-                }
                 );
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
     }
 
     class VideoListAdapter extends BaseRecyclerViewAdapter<VideoBean> {
