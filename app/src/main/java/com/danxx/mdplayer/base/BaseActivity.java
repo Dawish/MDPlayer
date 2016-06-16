@@ -97,4 +97,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * 设置标题
+     * @param strTitle  标题
+     * @param showHome  显示返回按钮
+     */
+    public void setTitle(String strTitle,boolean showHome){
+        setTitle(strTitle);
+        getSupportActionBar().setDisplayShowHomeEnabled(showHome);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(showHome);
+    }
 }
