@@ -18,6 +18,7 @@ import com.danxx.mdplayer.R;
 import com.danxx.mdplayer.adapter.BaseRecyclerViewAdapter;
 import com.danxx.mdplayer.adapter.BaseRecyclerViewHolder;
 import com.danxx.mdplayer.application.Common;
+import com.danxx.mdplayer.base.BaseFragment;
 import com.danxx.mdplayer.meizhi.APIService;
 import com.danxx.mdplayer.model.MeizhiList;
 import com.danxx.mdplayer.module.WasuCacheModule;
@@ -40,7 +41,7 @@ import rx.schedulers.Schedulers;
  * Created by Danxx on 2016/6/14.
  * 图片列表
  */
-public class MeizhiListFragment extends Fragment {
+public class MeizhiListFragment extends BaseFragment {
     private static final String ARG_PARAM = "id";
     /**图片分类id**/
     private int id;
@@ -76,14 +77,13 @@ public class MeizhiListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    protected View getContentView(LayoutInflater inflater,ViewGroup container) {
         rootView = inflater.inflate(R.layout.fragment_meizhi_list, container, false);
-        initView();
         return rootView;
     }
 
-    private void initView(){
+    @Override
+    protected void initViews(View contentView) {
         listRecyclerView = (RecyclerView) rootView.findViewById(R.id.listRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
@@ -94,15 +94,6 @@ public class MeizhiListFragment extends Fragment {
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.d_10dp);
         listRecyclerView.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
         listRecyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new BaseRecyclerViewAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, Object data) {
-                Intent intent = new Intent();
-                intent.putExtra("url", ((MeizhiList.TngouEntity) data).getImg());
-                intent.setClass(getActivity(), MeizhiDetailActivity.class);
-                startActivity(intent);
-            }
-        });
         if(cacheStr!=null && !TextUtils.isEmpty(cacheStr)){  //要是缓存中数据就使用缓存中的数据显示
             mData = gson.fromJson(cacheStr , new TypeToken<List<MeizhiList.TngouEntity>>() {}.getType());
             if(mData != null && mData.size()>0){
@@ -113,6 +104,23 @@ public class MeizhiListFragment extends Fragment {
         }else{
             inited = false;
         }
+    }
+
+    @Override
+    protected void initListeners() {
+        mAdapter.setOnItemClickListener(new BaseRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, Object data) {
+                Intent intent = new Intent();
+                intent.putExtra("url", ((MeizhiList.TngouEntity) data).getImg());
+                intent.setClass(getActivity(), MeizhiDetailActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void initData() {
         fetchDataByRxjava();
     }
 
