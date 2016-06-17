@@ -12,6 +12,8 @@ import rx.functions.Func1;
  * Observable创建工具类
  */
 public class RxUtil {
+
+
     /**
      * make a operate change to observable
      * @param func
@@ -71,5 +73,6 @@ public class RxUtil {
             }
         }
     }
+
 
 }

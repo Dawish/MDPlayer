@@ -6,7 +6,7 @@ import java.util.List;
  * Created by Danxx on 2016/6/13.
  * 妹纸分类bean
  */
-public class MeizhiClassify {
+public class MeizhiClassify extends Model{
 
     public boolean status;
 

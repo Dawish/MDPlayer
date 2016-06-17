@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by Danxx on 2016/6/15.
  */
-public class MeizhiList {
+public class MeizhiList extends Model {
 
 
     private boolean status;
