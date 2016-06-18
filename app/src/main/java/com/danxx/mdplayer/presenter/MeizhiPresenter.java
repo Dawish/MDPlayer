@@ -27,7 +27,7 @@ import rx.schedulers.Schedulers;
  */
 public class MeizhiPresenter extends BasePresenter<MeizhiView> {
     private static final String cacheKey = "MeizhiClassifyCacheData";
-    private boolean inited = false;
+    private boolean inited_01 = false;
     private Gson gson = new Gson();
     private List<MeizhiClassify.TngouEntity> mData = new ArrayList<MeizhiClassify.TngouEntity>();
     /**
@@ -43,52 +43,52 @@ public class MeizhiPresenter extends BasePresenter<MeizhiView> {
             if(mData != null && mData.size()>0){
                 if(MeizhiPresenter.this.getMvpView() != null){
                     MeizhiPresenter.this.getMvpView().getDataSuccess(mData);
-                    inited = true;
+                    inited_01 = true;
                 }
             }
         }else{
-            inited = false;
+            inited_01 = false;
         }
         Retrofit retrofit = RetrofitUtil.createRetrofit(Common.meizhi_api);
         APIService service = retrofit.create(APIService.class);
         Observable<MeizhiClassify> observable = service.getMeizhiClassify();
-        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<MeizhiClassify>() {
-                    @Override
-                    public void onCompleted() {
+        this.mCompositeSubscription.add( observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Subscriber<MeizhiClassify>() {
+                @Override
+                public void onCompleted() {
+                }
 
+                @Override
+                public void onError(Throwable e) {
+                    if(MeizhiPresenter.this.getMvpView() != null){
+                        MeizhiPresenter.this.getMvpView().getDataError(e);
                     }
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        if(MeizhiPresenter.this.getMvpView() != null){
-                            MeizhiPresenter.this.getMvpView().getDataError(e);
-                        }
-                    }
-
-                    @Override
-                    public void onNext(MeizhiClassify meizhiClassify) {
-                        Log.d("danxx", "onNext data size-->" + meizhiClassify.getTngou().size());
-                        if (meizhiClassify.getTngou().size() > 0) {
-                            if(!inited){  //缓存中没有数据就显示类容保存数据
-                                if(MeizhiPresenter.this.getMvpView() != null){
-                                    MeizhiPresenter.this.getMvpView().getDataSuccess(meizhiClassify.getTngou());
-                                }
-                                String cacheStr = gson.toJson(meizhiClassify.getTngou());
-                                if(!TextUtils.isEmpty(cacheStr)){
-                                    WasuCacheModule.getInstance().remove(cacheKey);
-                                    WasuCacheModule.getInstance().put(cacheKey ,cacheStr);
-                                }
-                            }else{  //缓存中有数据就更新缓存中的数据
-                                String cacheStr = gson.toJson(meizhiClassify.getTngou());
-                                if(!TextUtils.isEmpty(cacheStr)){
-                                    WasuCacheModule.getInstance().remove(cacheKey);
-                                    WasuCacheModule.getInstance().put(cacheKey ,cacheStr);
-                                }
+                @Override
+                public void onNext(MeizhiClassify meizhiClassify) {
+                    Log.d("danxx", "onNext data size-->" + meizhiClassify.getTngou().size());
+                    if (meizhiClassify.getTngou().size() > 0) {
+                        if(!inited_01){  //缓存中没有数据就显示类容保存数据
+                            if(MeizhiPresenter.this.getMvpView() != null){
+                                MeizhiPresenter.this.getMvpView().getDataSuccess(meizhiClassify.getTngou());
+                            }
+                            String cacheStr = gson.toJson(meizhiClassify.getTngou());
+                            if(!TextUtils.isEmpty(cacheStr)){
+                                WasuCacheModule.getInstance().remove(cacheKey);
+                                WasuCacheModule.getInstance().put(cacheKey ,cacheStr);
+                            }
+                        }else{  //缓存中有数据就更新缓存中的数据
+                            String cacheStr = gson.toJson(meizhiClassify.getTngou());
+                            if(!TextUtils.isEmpty(cacheStr)){
+                                WasuCacheModule.getInstance().remove(cacheKey);
+                                WasuCacheModule.getInstance().put(cacheKey ,cacheStr);
                             }
                         }
                     }
-                });
+                }
+            }));
+
 
     }
 
