@@ -28,6 +28,7 @@ public class MeizhiDetailActivity extends BaseActivity implements PictureView{
     private String url;
     private PicturePresenter picturePresenter;
     private Bitmap bitmap;
+    private String name;
     /**
      * Fill in layout id
      *
@@ -48,7 +49,7 @@ public class MeizhiDetailActivity extends BaseActivity implements PictureView{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         url = intent.getStringExtra("url");
-
+        name = intent.getStringExtra("name");
         photoView = (PhotoView) findViewById(R.id.img);
         // 启用图片缩放功能
         photoView.enable();
@@ -83,6 +84,7 @@ public class MeizhiDetailActivity extends BaseActivity implements PictureView{
         float maxScale = photoView.getMaxScale();
         // 设置动画的插入器
 //        photoView.setInterpolator(Interpolator interpolator);
+        setTitle(name);
         if(!TextUtils.isEmpty(url)){
             Picasso.with(MeizhiDetailActivity.this).load("http://tnfs.tngou.net/image" + url).into(photoView);
         }

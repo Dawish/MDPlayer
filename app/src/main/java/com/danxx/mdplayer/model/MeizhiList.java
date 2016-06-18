@@ -37,7 +37,7 @@ public class MeizhiList extends Model {
         this.tngou = tngou;
     }
 
-    public static class TngouEntity {
+    public static class TngouEntity extends Model {
         /**访问数**/
         private int count;
         /**收藏数**/

@@ -21,8 +21,11 @@ import com.danxx.mdplayer.application.Common;
 import com.danxx.mdplayer.base.BaseFragment;
 import com.danxx.mdplayer.meizhi.APIService;
 import com.danxx.mdplayer.model.MeizhiList;
+import com.danxx.mdplayer.model.Model;
 import com.danxx.mdplayer.module.WasuCacheModule;
+import com.danxx.mdplayer.presenter.MeizhiPresenter;
 import com.danxx.mdplayer.utils.RetrofitUtil;
+import com.danxx.mdplayer.view.MeizhiView;
 import com.danxx.mdplayer.widget.SpaceItemDecoration;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -41,18 +44,15 @@ import rx.schedulers.Schedulers;
  * Created by Danxx on 2016/6/14.
  * 图片列表
  */
-public class MeizhiListFragment extends BaseFragment {
+public class MeizhiListFragment extends BaseFragment implements MeizhiView {
     private static final String ARG_PARAM = "id";
     /**图片分类id**/
     private int id;
     private RecyclerView listRecyclerView;
-    private static final String cacheKey = "MeizhiListCacheData";
-    private String cacheStr = "";
-    private boolean inited = false;
-    private Gson gson = new Gson();
     private View rootView;
     private List<MeizhiList.TngouEntity> mData = new ArrayList<MeizhiList.TngouEntity>();
     private MyAdapter mAdapter;
+    private MeizhiPresenter meizhiPresenter;
 
     public MeizhiListFragment() {
         // Required empty public constructor
@@ -72,8 +72,6 @@ public class MeizhiListFragment extends BaseFragment {
         if (getArguments() != null) {
             id = getArguments().getInt(ARG_PARAM);
         }
-        /**先从缓存获取数据**/
-        cacheStr = WasuCacheModule.getInstance().getAsString(String.valueOf(id));
     }
 
     @Override
@@ -94,16 +92,7 @@ public class MeizhiListFragment extends BaseFragment {
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.d_10dp);
         listRecyclerView.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
         listRecyclerView.setAdapter(mAdapter);
-        if(cacheStr!=null && !TextUtils.isEmpty(cacheStr)){  //要是缓存中数据就使用缓存中的数据显示
-            mData = gson.fromJson(cacheStr , new TypeToken<List<MeizhiList.TngouEntity>>() {}.getType());
-            if(mData != null && mData.size()>0){
-                mAdapter.setData(mData);
-                mAdapter.notifyDataSetChanged();
-                inited = true;
-            }
-        }else{
-            inited = false;
-        }
+
     }
 
     @Override
@@ -113,6 +102,7 @@ public class MeizhiListFragment extends BaseFragment {
             public void onItemClick(int position, Object data) {
                 Intent intent = new Intent();
                 intent.putExtra("url", ((MeizhiList.TngouEntity) data).getImg());
+                intent.putExtra("name" ,((MeizhiList.TngouEntity) data).getTitle());
                 intent.setClass(getActivity(), MeizhiDetailActivity.class);
                 startActivity(intent);
             }
@@ -121,54 +111,30 @@ public class MeizhiListFragment extends BaseFragment {
 
     @Override
     protected void initDatas() {
-        fetchDataByRxjava();
+        meizhiPresenter = new MeizhiPresenter();
+        meizhiPresenter.attachView(this);
+        meizhiPresenter.getMeizhiListData(id);
     }
 
-    /**
-     * Rxjava获取图片信息列表
-     */
-    private void fetchDataByRxjava(){
-        Log.d("danxx","fetchDataByRxjava---->");
-        Retrofit retrofit = RetrofitUtil.createRetrofit(Common.meizhi_api);
-        APIService service = retrofit.create(APIService.class);
 
-        Observable<MeizhiList> observable = service.getMeizhiList(String.valueOf(id) ,"1" ,"40");
-        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Subscriber<MeizhiList>() {
-            @Override
-            public void onCompleted() {
+    @Override
+    public void getDataSuccess(List<? extends Model> data) {
+        Log.d("danxx","mezhilist getDataSuccess-->"+data.size());
+        mData.clear();
+        mData = (List<MeizhiList.TngouEntity>) data;
+        mAdapter.setData(mData);
+        mAdapter.notifyDataSetChanged();
+    }
 
-            }
+    @Override
+    public void getDataError(Throwable e) {
+        Log.e("danxx","mezhilist getDataError-->");
+    }
 
-            @Override
-            public void onError(Throwable e) {
-                e.printStackTrace();
-                Log.d("danxx", "list data fetch error");
-            }
-
-            @Override
-            public void onNext(MeizhiList meizhiList) {
-                if (meizhiList != null && meizhiList.getTngou().size() > 0) {
-                    if(!inited){  //缓存中没有数据就显示类容保存数据
-                        mData = null;
-                        mData = meizhiList.getTngou();
-                        mAdapter.setData(mData);
-                        mAdapter.notifyDataSetChanged();
-                        String cacheStr = gson.toJson(meizhiList.getTngou());
-                        if(!TextUtils.isEmpty(cacheStr)){
-                            WasuCacheModule.getInstance().remove(String.valueOf(id));
-                            WasuCacheModule.getInstance().put(String.valueOf(id) ,cacheStr);
-                        }
-                    }else{  //缓存中有数据就更新缓存中的数据
-                        String cacheStr = gson.toJson(meizhiList.getTngou());
-                        if(!TextUtils.isEmpty(cacheStr)){
-                            WasuCacheModule.getInstance().remove(String.valueOf(id));
-                            WasuCacheModule.getInstance().put(String.valueOf(id) ,cacheStr);
-                        }
-                    }
-                }
-            }
-        });
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        meizhiPresenter.detachView();
     }
 
     class MyAdapter extends BaseRecyclerViewAdapter<MeizhiList.TngouEntity>{
