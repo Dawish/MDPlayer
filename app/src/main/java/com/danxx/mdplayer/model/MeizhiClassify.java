@@ -28,7 +28,7 @@ public class MeizhiClassify extends Model{
         this.tngou = tngou;
     }
 
-    public static class TngouEntity {
+    public static class TngouEntity extends Model{
         public String description;
         public int id;
         public String keywords;

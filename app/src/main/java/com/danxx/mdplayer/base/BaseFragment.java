@@ -28,7 +28,7 @@ public abstract class BaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
         initListeners();
-        initData();
+        initDatas();
     }
 
     /**
@@ -53,5 +53,5 @@ public abstract class BaseFragment extends Fragment {
     /**
      * init data
      */
-    protected abstract void initData();
+    protected abstract void initDatas();
 }

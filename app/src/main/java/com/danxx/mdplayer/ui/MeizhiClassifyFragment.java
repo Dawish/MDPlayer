@@ -13,10 +13,14 @@ import android.view.ViewGroup;
 import com.danxx.mdplayer.R;
 import com.danxx.mdplayer.adapter.FragmentAdapter;
 import com.danxx.mdplayer.application.Common;
+import com.danxx.mdplayer.base.BaseFragment;
 import com.danxx.mdplayer.meizhi.APIService;
 import com.danxx.mdplayer.model.MeizhiClassify;
+import com.danxx.mdplayer.model.Model;
 import com.danxx.mdplayer.module.WasuCacheModule;
+import com.danxx.mdplayer.presenter.MeizhiPresenter;
 import com.danxx.mdplayer.utils.RetrofitUtil;
+import com.danxx.mdplayer.view.MeizhiView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -34,23 +38,19 @@ import rx.schedulers.Schedulers;
  * Created by Danxx on 2016/6/13.
  * 图片分类
  */
-public class MeizhiClassifyFragment extends Fragment{
+public class MeizhiClassifyFragment extends BaseFragment implements MeizhiView{
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
     private String mParam2;
-    private static final String cacheKey = "MeizhiClassifyCacheData";
-    private String cacheStr = "";
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private BlurView blurView;
     private View rootView;
-    private boolean inited = false;
     private List<MeizhiClassify.TngouEntity> mData = new ArrayList<MeizhiClassify.TngouEntity>();
     private List<String> titles = new ArrayList<>();
-    private Gson gson = new Gson();
+    private MeizhiPresenter meizhiPresenter;
+
     public MeizhiClassifyFragment() {
-        // Required empty public constructor
     }
 
     /**
@@ -71,103 +71,31 @@ public class MeizhiClassifyFragment extends Fragment{
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        /**先从缓存获取数据**/
-        cacheStr = WasuCacheModule.getInstance().getAsString(cacheKey);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    protected View getContentView(LayoutInflater inflater, ViewGroup container) {
         rootView = inflater.inflate(R.layout.fragment_meizhi, container, false);
-        initView();
-//        setupBlurView();
-        initData();
         return rootView;
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    private void initView(){
+    protected void initViews(View contentView) {
         viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabLayout);
-//        blurView = (BlurView) rootView.findViewById(R.id.blurView);
     }
 
-    private void initData(){
-        if(cacheStr!=null && !TextUtils.isEmpty(cacheStr)){  //要是缓存中数据就使用缓存中的数据显示
-            mData = gson.fromJson(cacheStr , new TypeToken<List<MeizhiClassify.TngouEntity>>() {}.getType());
-            if(mData != null && mData.size()>0){
-                initViewPager();
-                inited = true;
-            }
-        }else{
-            inited = false;
-        }
-        fetchDataByRxjava();
-    }
-
-    /**
-     * 图片分类数据获取
-     */
-    private void fetchDataByRxjava(){
-        Retrofit retrofit = RetrofitUtil.createRetrofit(Common.meizhi_api);
-        APIService service = retrofit.create(APIService.class);
-        Observable<MeizhiClassify> observable = service.getMeizhiClassify();
-        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<MeizhiClassify>() {
-                @Override
-                public void onCompleted() {
-
-                }
-
-                @Override
-                public void onError(Throwable e) {
-
-                }
-
-                @Override
-                public void onNext(MeizhiClassify meizhiClassify) {
-                    Log.d("danxx", "data size-->" + meizhiClassify.getTngou().size());
-                    if (meizhiClassify.getTngou().size() > 0) {
-                        if(!inited){  //缓存中没有数据就显示类容保存数据
-                            mData = null;
-                            mData = meizhiClassify.getTngou();
-                            initViewPager();
-                            String cacheStr = gson.toJson(mData);
-                            if(!TextUtils.isEmpty(cacheStr)){
-                                WasuCacheModule.getInstance().remove(cacheKey);
-                                WasuCacheModule.getInstance().put(cacheKey ,cacheStr);
-                            }
-                        }else{  //缓存中有数据就更新缓存中的数据
-                            String cacheStr = gson.toJson(meizhiClassify.getTngou());
-                            if(!TextUtils.isEmpty(cacheStr)){
-                                WasuCacheModule.getInstance().remove(cacheKey);
-                                WasuCacheModule.getInstance().put(cacheKey ,cacheStr);
-                            }
-                        }
-                    }
-                }
-            });
+    @Override
+    protected void initListeners() {
 
     }
 
-//    private void setupBlurView() {
-//        final float radius = 16f;
-//
-//        final View decorView = getActivity().getWindow().getDecorView();
-//        //Activity's root View. Can also be root View of your layout
-//        final View rootView = decorView.findViewById(android.R.id.content);
-//        //set background, if your root layout doesn't have one
-//        final Drawable windowBackground = decorView.getBackground();
-//
-//        blurView.setupWith(rootView)
-//                .windowBackground(windowBackground)
-//                .blurAlgorithm(new RenderScriptBlur(getActivity(), false)) //Preferable algorithm, needs RenderScript support mode enabled
-//                .blurRadius(radius);
-//    }
+    @Override
+    protected void initDatas() {
+        meizhiPresenter = new MeizhiPresenter();
+        meizhiPresenter.attachView(this);
+        meizhiPresenter.getMeizhiClassifyData();
+    }
 
     private void initViewPager(){
         int size = mData.size();
@@ -193,4 +121,22 @@ public class MeizhiClassifyFragment extends Fragment{
 
     }
 
+    @Override
+    public void getDataSuccess(List<? extends Model> data) {
+        Log.d("danxx","getDataSuccess-->"+data.size());
+        mData = (List<MeizhiClassify.TngouEntity>) data;
+        initViewPager();
+    }
+
+    @Override
+    public void getDataError(Throwable e) {
+        e.printStackTrace();
+        Log.d("danxx","getDataError-->");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        meizhiPresenter.detachView();
+    }
 }

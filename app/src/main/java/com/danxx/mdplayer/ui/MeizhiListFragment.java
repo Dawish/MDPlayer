@@ -120,7 +120,7 @@ public class MeizhiListFragment extends BaseFragment {
     }
 
     @Override
-    protected void initData() {
+    protected void initDatas() {
         fetchDataByRxjava();
     }
 

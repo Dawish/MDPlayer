@@ -1,5 +1,7 @@
 package com.danxx.mdplayer.mvp;
 
+import android.util.Log;
+
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -22,6 +24,7 @@ public class BasePresenter<T extends MvpView> implements Presenter<T> {
      */
     @Override
     public void attachView(T mvpView) {
+        Log.d("danxx","attachView");
         this.mMvpView = mvpView;
         /****/
         this.mCompositeSubscription = new CompositeSubscription();
@@ -30,6 +33,7 @@ public class BasePresenter<T extends MvpView> implements Presenter<T> {
 
     @Override
     public void detachView() {
+        Log.d("danxx","detachView");
         this.mMvpView = null;
         /**取消Subscriber事件订阅**/
         this.mCompositeSubscription.unsubscribe();
