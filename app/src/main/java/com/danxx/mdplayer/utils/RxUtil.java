@@ -64,13 +64,13 @@ public class RxUtil {
                 }
             });
         } else {
-            /**是视频文件就通知观察者**/
-            if (f.exists() && f.canRead() && FileUtils.isVideo(f)) {
-                return Observable.just(f);
-            }else{
-                /**非视频文件就返回null**/
-                return null;
-            }
+            /**filter操作符过滤视频文件,是视频文件就通知观察者**/
+            return Observable.just(f).filter(new Func1<File, Boolean>() {
+                @Override
+                public Boolean call(File file) {
+                    return f.exists() && f.canRead() && FileUtils.isVideo(f);
+                }
+            });
         }
     }
 

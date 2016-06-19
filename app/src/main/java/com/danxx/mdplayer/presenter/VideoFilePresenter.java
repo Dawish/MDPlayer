@@ -25,6 +25,8 @@ public class VideoFilePresenter extends BasePresenter<IMVPView> {
      */
     public void getFileData(){
         File rootFile = Environment.getExternalStorageDirectory();
+        /**记录一个文件夹中视频文件的数量**/
+        final int count = 0;
         if(rootFile != null){
             Observable.just(rootFile)
                 .flatMap(new Func1<File, Observable<File>>() {
@@ -45,6 +47,7 @@ public class VideoFilePresenter extends BasePresenter<IMVPView> {
 
                         @Override
                         public void onNext(File file) {
+
                         }
                     }
                 );
@@ -73,13 +76,13 @@ public class VideoFilePresenter extends BasePresenter<IMVPView> {
                 }
             });
         } else {
-            /**是视频文件就通知观察者**/
-            if (f.exists() && f.canRead() && FileUtils.isVideo(f)) {
-                return Observable.just(f);
-            }else{
-                /**非视频文件就返回null**/
-                return null;
-            }
+            /**filter操作符过滤视频文件,是视频文件就通知观察者**/
+            return Observable.just(f).filter(new Func1<File, Boolean>() {
+                @Override
+                public Boolean call(File file) {
+                    return f.exists() && f.canRead() && FileUtils.isVideo(f);
+                }
+            });
         }
     }
 }
