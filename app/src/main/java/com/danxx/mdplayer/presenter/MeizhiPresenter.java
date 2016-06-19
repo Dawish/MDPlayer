@@ -10,7 +10,7 @@ import com.danxx.mdplayer.model.MeizhiClassify;
 import com.danxx.mdplayer.model.MeizhiList;
 import com.danxx.mdplayer.mvp.BasePresenter;
 import com.danxx.mdplayer.utils.RetrofitUtil;
-import com.danxx.mdplayer.view.MeizhiView;
+import com.danxx.mdplayer.view.IMVPView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -26,7 +26,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by Danxx on 2016/6/17.
  */
-public class MeizhiPresenter extends BasePresenter<MeizhiView> {
+public class MeizhiPresenter extends BasePresenter<IMVPView> {
     private static final String cacheKey = "MeizhiClassifyCacheData";
     private boolean inited_01 = false;
     private boolean inited_02 = false;

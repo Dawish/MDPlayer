@@ -9,7 +9,7 @@ import java.util.List;
  * Created by Danxx on 2016/6/17.
  * 妹纸接口
  */
-public interface MeizhiView extends MvpView {
+public interface IMVPView extends MvpView {
 
     /**
      * 获取数据成功后回调
@@ -22,4 +22,8 @@ public interface MeizhiView extends MvpView {
      * @param e
      */
     void getDataError(Throwable e);
+
+    void showProgress();
+
+    void hideProgress();
 }

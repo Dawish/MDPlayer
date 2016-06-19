@@ -15,7 +15,7 @@ import com.danxx.mdplayer.base.BaseFragment;
 import com.danxx.mdplayer.model.MeizhiClassify;
 import com.danxx.mdplayer.model.Model;
 import com.danxx.mdplayer.presenter.MeizhiPresenter;
-import com.danxx.mdplayer.view.MeizhiView;
+import com.danxx.mdplayer.view.IMVPView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ import java.util.List;
  * Created by Danxx on 2016/6/13.
  * 图片分类
  */
-public class MeizhiClassifyFragment extends BaseFragment implements MeizhiView{
+public class MeizhiClassifyFragment extends BaseFragment implements IMVPView {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
@@ -118,6 +118,16 @@ public class MeizhiClassifyFragment extends BaseFragment implements MeizhiView{
     public void getDataError(Throwable e) {
         e.printStackTrace();
         Log.d("danxx","getDataError-->");
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
     }
 
     @Override

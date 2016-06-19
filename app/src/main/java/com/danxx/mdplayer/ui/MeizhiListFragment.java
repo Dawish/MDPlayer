@@ -19,7 +19,7 @@ import com.danxx.mdplayer.base.BaseFragment;
 import com.danxx.mdplayer.model.MeizhiList;
 import com.danxx.mdplayer.model.Model;
 import com.danxx.mdplayer.presenter.MeizhiPresenter;
-import com.danxx.mdplayer.view.MeizhiView;
+import com.danxx.mdplayer.view.IMVPView;
 import com.danxx.mdplayer.widget.SpaceItemDecoration;
 import com.squareup.picasso.Picasso;
 
@@ -30,7 +30,7 @@ import java.util.List;
  * Created by Danxx on 2016/6/14.
  * 图片列表
  */
-public class MeizhiListFragment extends BaseFragment implements MeizhiView {
+public class MeizhiListFragment extends BaseFragment implements IMVPView {
     private static final String ARG_PARAM = "id";
     /**图片分类id**/
     private int id;
@@ -115,6 +115,16 @@ public class MeizhiListFragment extends BaseFragment implements MeizhiView {
     @Override
     public void getDataError(Throwable e) {
         Log.e("danxx","mezhilist getDataError-->");
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
     }
 
     @Override

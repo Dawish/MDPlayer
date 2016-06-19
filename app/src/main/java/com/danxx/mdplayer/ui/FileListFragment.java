@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.danxx.mdplayer.R;
 import com.danxx.mdplayer.adapter.BaseRecyclerViewAdapter;
 import com.danxx.mdplayer.adapter.BaseRecyclerViewHolder;
+import com.danxx.mdplayer.base.BaseFragment;
 import com.danxx.mdplayer.model.CacheManager;
 import com.danxx.mdplayer.model.FileBean;
 import com.danxx.mdplayer.utils.FileUtils;
@@ -42,7 +43,7 @@ import java.util.List;
 /**
  *视频列表页
  */
-public class FileListFragment extends Fragment {
+public class FileListFragment extends BaseFragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final int MSG_READ_FINISH = 1;
@@ -118,14 +119,13 @@ public class FileListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    protected View getContentView(LayoutInflater inflater, ViewGroup container) {
         rootView = inflater.inflate(R.layout.fragment_list, container, false);
-        initView();
         return rootView;
     }
 
-    private void initView(){
+    @Override
+    protected void initViews(View contentView) {
         filesListView = (RecyclerView) rootView.findViewById(R.id.filesListview);
         FAM = (FloatingActionMenu) rootView.findViewById(R.id.FAM);
         FAM.hideMenu(false);
@@ -135,6 +135,24 @@ public class FileListFragment extends Fragment {
         filesListView.setLayoutManager(mLayoutManager);
         filesListView.setItemAnimator(new DefaultItemAnimator());
         filesListView.setAdapter(mAdapter);
+
+        refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refreshLayout);
+        // 这句话是为了，第一次进入页面的时候显示加载进度条
+        refreshLayout.setProgressViewOffset(true, 0, (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 28, getResources()
+                        .getDisplayMetrics()));
+        refreshLayout.setProgressViewEndTarget(true, 200);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                FAM.showMenu(true);
+            }
+        },300);
+    }
+
+    @Override
+    protected void initListeners() {
+        //item点击监听
         mAdapter.setOnItemClickListener(new BaseRecyclerViewAdapter.OnItemClickListener() {
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -144,18 +162,14 @@ public class FileListFragment extends Fragment {
                 getActivity().startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
             }
         });
-        refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refreshLayout);
-        // 这句话是为了，第一次进入页面的时候显示加载进度条
-        refreshLayout.setProgressViewOffset(true, 0, (int) TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 28, getResources()
-                        .getDisplayMetrics()));
-        refreshLayout.setProgressViewEndTarget(true, 200);
+        // 下拉刷新监听
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
             }
         });
+        // recyclerView滚动FloatingActionMenu显示隐藏监听
         filesListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -182,6 +196,10 @@ public class FileListFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Override
+    protected void initDatas() {
         /**如果有缓存数据那就先显示缓存数据**/
         if(tempStr != null && !TextUtils.isEmpty(tempStr)){
             Gson gson = new Gson();
@@ -196,13 +214,6 @@ public class FileListFragment extends Fragment {
         }else{
             readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
         }
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-               FAM.showMenu(true);
-            }
-        },300);
     }
 
     public void closeFAM(){
