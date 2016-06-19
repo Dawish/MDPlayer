@@ -1,4 +1,4 @@
-package com.danxx.mdplayer.module;
+package com.danxx.mdplayer.model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -40,14 +40,14 @@ import java.util.concurrent.atomic.AtomicLong;
  * 缓存工具
  * by danxingxi on 2016/5/24
  */
-public class WasuCacheModule {
+public class CacheManager {
 	public static final int TIME_HOUR = 60 * 60;
 	public static final int TIME_DAY = TIME_HOUR * 24;
 	private static final int MAX_SIZE = 1000 * 1000 * 50; // 50 mb
 	private static final int MAX_COUNT = Integer.MAX_VALUE; // 不限制存放数据的数量
 	private WasuCacheManager mCacheManager;
 
-	private static WasuCacheModule mInstance;
+	private static CacheManager mInstance;
 
 	private boolean isInited = false;
 
@@ -56,21 +56,21 @@ public class WasuCacheModule {
 	 *
 	 * @return
 	 */
-	public static WasuCacheModule getInstance() {
+	public static CacheManager getInstance() {
 		if (null == mInstance) {
-			synchronized (WasuCacheModule.class) {
+			synchronized (CacheManager.class) {
 				if (null == mInstance) {
-					mInstance = new WasuCacheModule();
+					mInstance = new CacheManager();
 				}
 			}
 		}
 		return mInstance;
 	}
-	private WasuCacheModule(){
+	private CacheManager(){
 	}
 
 	public void init(Context context){
-		init(context ,"WasuCacheData");
+		init(context ,"MDPlayerCacheData");
 	}
 
 	public void init(Context context ,String cacheName){
@@ -97,7 +97,7 @@ public class WasuCacheModule {
 	 * Since writing about the file is complete, and its close method is called,
 	 * its contents will be registered in the cache. Example of use:
 	 * 
-	 * WasuCacheModule cache = new WasuCacheModule(this) try { OutputStream stream =
+	 * CacheManager cache = new CacheManager(this) try { OutputStream stream =
 	 * cache.put("myFileName") stream.write("some bytes".getBytes()); // now
 	 * update cache! stream.close(); } catch(FileNotFoundException e){
 	 * e.printStackTrace() }
@@ -653,7 +653,7 @@ public class WasuCacheModule {
 
 		private void put(File file) {
 			if(!isInited){
-				throw new IllegalStateException("WasuCacheModule didn't init");
+				throw new IllegalStateException("CacheManager didn't init");
 			}
 			int curCacheCount = cacheCount.get();
 			while (curCacheCount + 1 > countLimit) {

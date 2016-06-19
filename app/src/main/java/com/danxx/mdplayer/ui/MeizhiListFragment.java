@@ -2,12 +2,10 @@ package com.danxx.mdplayer.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,28 +15,16 @@ import android.widget.ImageView;
 import com.danxx.mdplayer.R;
 import com.danxx.mdplayer.adapter.BaseRecyclerViewAdapter;
 import com.danxx.mdplayer.adapter.BaseRecyclerViewHolder;
-import com.danxx.mdplayer.application.Common;
 import com.danxx.mdplayer.base.BaseFragment;
-import com.danxx.mdplayer.meizhi.APIService;
 import com.danxx.mdplayer.model.MeizhiList;
 import com.danxx.mdplayer.model.Model;
-import com.danxx.mdplayer.module.WasuCacheModule;
 import com.danxx.mdplayer.presenter.MeizhiPresenter;
-import com.danxx.mdplayer.utils.RetrofitUtil;
 import com.danxx.mdplayer.view.MeizhiView;
 import com.danxx.mdplayer.widget.SpaceItemDecoration;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit.Retrofit;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Danxx on 2016/6/14.

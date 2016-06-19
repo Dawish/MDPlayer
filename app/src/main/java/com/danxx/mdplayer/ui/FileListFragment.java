@@ -28,8 +28,8 @@ import android.widget.Toast;
 import com.danxx.mdplayer.R;
 import com.danxx.mdplayer.adapter.BaseRecyclerViewAdapter;
 import com.danxx.mdplayer.adapter.BaseRecyclerViewHolder;
+import com.danxx.mdplayer.model.CacheManager;
 import com.danxx.mdplayer.model.FileBean;
-import com.danxx.mdplayer.module.WasuCacheModule;
 import com.danxx.mdplayer.utils.FileUtils;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
@@ -77,8 +77,8 @@ public class FileListFragment extends Fragment {
                     Gson gson = new Gson();
                     String cacheStr = gson.toJson(fileBeans);
                     if(!TextUtils.isEmpty(cacheStr)){
-                        WasuCacheModule.getInstance().remove(cacheKey);
-                        WasuCacheModule.getInstance().put(cacheKey ,cacheStr);
+                        CacheManager.getInstance().remove(cacheKey);
+                        CacheManager.getInstance().put(cacheKey ,cacheStr);
                     }
                     refreshLayout.setRefreshing(false);
                 }else{
@@ -114,7 +114,7 @@ public class FileListFragment extends Fragment {
             readTaskHandler = new Handler(handlerThread.getLooper());
         }
 //        readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
-        tempStr = WasuCacheModule.getInstance().getAsString(cacheKey);
+        tempStr = CacheManager.getInstance().getAsString(cacheKey);
     }
 
     @Override

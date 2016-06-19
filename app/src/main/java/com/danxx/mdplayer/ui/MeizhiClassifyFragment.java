@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,27 +11,14 @@ import android.view.ViewGroup;
 
 import com.danxx.mdplayer.R;
 import com.danxx.mdplayer.adapter.FragmentAdapter;
-import com.danxx.mdplayer.application.Common;
 import com.danxx.mdplayer.base.BaseFragment;
-import com.danxx.mdplayer.meizhi.APIService;
 import com.danxx.mdplayer.model.MeizhiClassify;
 import com.danxx.mdplayer.model.Model;
-import com.danxx.mdplayer.module.WasuCacheModule;
 import com.danxx.mdplayer.presenter.MeizhiPresenter;
-import com.danxx.mdplayer.utils.RetrofitUtil;
 import com.danxx.mdplayer.view.MeizhiView;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import eightbitlab.com.blurview.BlurView;
-import retrofit.Retrofit;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Danxx on 2016/6/13.
