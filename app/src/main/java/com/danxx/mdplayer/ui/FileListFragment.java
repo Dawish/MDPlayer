@@ -31,7 +31,9 @@ import com.danxx.mdplayer.adapter.BaseRecyclerViewHolder;
 import com.danxx.mdplayer.base.BaseFragment;
 import com.danxx.mdplayer.model.CacheManager;
 import com.danxx.mdplayer.model.FileBean;
+import com.danxx.mdplayer.model.Model;
 import com.danxx.mdplayer.utils.FileUtils;
+import com.danxx.mdplayer.view.IMVPView;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -43,7 +45,7 @@ import java.util.List;
 /**
  *视频列表页
  */
-public class FileListFragment extends BaseFragment {
+public class FileListFragment extends BaseFragment implements IMVPView {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final int MSG_READ_FINISH = 1;
@@ -231,6 +233,27 @@ public class FileListFragment extends BaseFragment {
     }
 
     private void ReadVideoDirectoryByRxjava(){
+
+    }
+
+    @Override
+    public void getDataSuccess(List<? extends Model> data) {
+
+    }
+
+    @Override
+    public void getDataError(Throwable e) {
+        e.printStackTrace();
+        showToast("视频文件读取失败，请稍后重试！");
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
 
     }
 

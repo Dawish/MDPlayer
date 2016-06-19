@@ -4,7 +4,7 @@ package com.danxx.mdplayer.model;
  * Created by Danxx on 2016/5/31.
  * 视频类
  */
-public class VideoBean {
+public class VideoBean extends Model {
 
     public String name;
     public String path;

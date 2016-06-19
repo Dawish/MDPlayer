@@ -1,12 +1,19 @@
 package com.danxx.mdplayer.presenter;
 
+import android.os.Environment;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.danxx.mdplayer.model.VideoBean;
 import com.danxx.mdplayer.mvp.BasePresenter;
 import com.danxx.mdplayer.utils.FileUtils;
+import com.danxx.mdplayer.utils.RxUtil;
 import com.danxx.mdplayer.view.IMVPView;
 
 import java.io.File;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Func1;
 
 /**
@@ -17,7 +24,31 @@ public class VideoFilePresenter extends BasePresenter<IMVPView> {
      * 获取所有包含视频的文件
      */
     public void getFileData(){
+        File rootFile = Environment.getExternalStorageDirectory();
+        if(rootFile != null){
+            Observable.just(rootFile)
+                .flatMap(new Func1<File, Observable<File>>() {
+                    @Override
+                    public Observable<File> call(File file) {
+                        return listFiles(file);
+                    }
+                })
+                .subscribe(
+                    new Subscriber<File>() {
+                        @Override
+                        public void onCompleted() {
+                        }
 
+                        @Override
+                        public void onError(Throwable e) {
+                        }
+
+                        @Override
+                        public void onNext(File file) {
+                        }
+                    }
+                );
+        }
     }
 
     /**

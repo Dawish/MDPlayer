@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 /**
  * Created by Dawish on 2016/6/17.
@@ -54,4 +55,12 @@ public abstract class BaseFragment extends Fragment {
      * init data
      */
     protected abstract void initDatas();
+    /**
+     * show toast
+     */
+    protected  void showToast(String msg){
+        if(msg != null){
+            Toast.makeText(mActivity , msg,Toast.LENGTH_SHORT).show();
+        }
+    }
 }
