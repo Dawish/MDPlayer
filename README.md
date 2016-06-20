@@ -1,5 +1,5 @@
 # MDPlayer万能播放器
-### MDPlayer，基于`ijkplayer`+`Rxjava`+`Rxandroid`+`Retrofit2.0`+`MVP`的android万能播放器，可以播放本地和在线视频，可以浏览宅男杀手妹纸图片，UI设计遵循 Material Design。
+#### MDPlayer，基于`ijkplayer`+`Rxjava`+`Rxandroid`+`Retrofit2.0`+`MVP`+`Material Design`的android万能播放器，可以播放本地和在线视频，可以浏览宅男杀手妹纸图片，UI设计遵循 Material Design。
 
 
 ----------
