@@ -20,7 +20,7 @@ public class App extends Application {
 
     }
 
-    public Context getApplicationContext(){
+    public Context getAppContext(){
         return mContext;
     }
 

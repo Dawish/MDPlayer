@@ -2,15 +2,11 @@ package com.danxx.mdplayer.ui;
 
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.danxx.mdplayer.R;
 import com.danxx.mdplayer.adapter.BaseRecyclerViewAdapter;
@@ -32,14 +27,12 @@ import com.danxx.mdplayer.base.BaseFragment;
 import com.danxx.mdplayer.model.CacheManager;
 import com.danxx.mdplayer.model.FileBean;
 import com.danxx.mdplayer.model.Model;
-import com.danxx.mdplayer.utils.FileUtils;
+import com.danxx.mdplayer.presenter.VideoFilePresenter;
 import com.danxx.mdplayer.view.IMVPView;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,35 +55,13 @@ public class FileListFragment extends BaseFragment implements IMVPView {
     private String tempStr;
     private boolean isRefreshing;
     private int mScrollThreshold = 4;
+    private VideoFilePresenter videoFilePresenter;
+
     private SwipeRefreshLayout refreshLayout;
 
     /**包含有视频文件夹集合**/
-    private List<FileBean> fileBeans = new ArrayList<FileBean>();
     private HandlerThread handlerThread;
     private Handler readTaskHandler;
-    private Handler mainHandler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            if(msg.what == MSG_READ_FINISH){
-                isRefreshing = false;
-                if(fileBeans.size()>0){
-                    Toast.makeText(getActivity(), "视频文件读取到了"+ fileBeans.size(), Toast.LENGTH_LONG).show();
-                    mAdapter.setData(fileBeans);
-                    mAdapter.notifyDataSetChanged();
-                    Gson gson = new Gson();
-                    String cacheStr = gson.toJson(fileBeans);
-                    if(!TextUtils.isEmpty(cacheStr)){
-                        CacheManager.getInstance().remove(cacheKey);
-                        CacheManager.getInstance().put(cacheKey ,cacheStr);
-                    }
-                    refreshLayout.setRefreshing(false);
-                }else{
-                    Toast.makeText(getActivity(), "sorry,没有读取到视频文件!", Toast.LENGTH_LONG).show();
-                }
-            }
-            return false;
-        }
-    });
     /**
      */
     public static FileListFragment newInstance(String param1, String param2) {
@@ -149,7 +120,7 @@ public class FileListFragment extends BaseFragment implements IMVPView {
             public void run() {
                 FAM.showMenu(true);
             }
-        },300);
+        }, 300);
     }
 
     @Override
@@ -159,8 +130,8 @@ public class FileListFragment extends BaseFragment implements IMVPView {
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onItemClick(int position, Object data) {
-                Intent intent = new Intent(getActivity(),VideoListActivity.class);
-                intent.putExtra("path" ,((FileBean)data).path);
+                Intent intent = new Intent(getActivity(), VideoListActivity.class);
+                intent.putExtra("path", ((FileBean) data).path);
                 getActivity().startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
             }
         });
@@ -168,7 +139,7 @@ public class FileListFragment extends BaseFragment implements IMVPView {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
+//                readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
             }
         });
         // recyclerView滚动FloatingActionMenu显示隐藏监听
@@ -210,12 +181,15 @@ public class FileListFragment extends BaseFragment implements IMVPView {
                     new TypeToken<List<FileBean>>() {
                     }.getType());
             if(dataList.size()>0){
-                mAdapter.setData(dataList);
-                mAdapter.notifyDataSetChanged();
+//                mAdapter.setData(dataList);
+//                mAdapter.notifyDataSetChanged();
             }
         }else{
-            readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
+//            readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
         }
+        videoFilePresenter = new VideoFilePresenter();
+        videoFilePresenter.attachView(this);
+        videoFilePresenter.getFileData();
     }
 
     public void closeFAM(){
@@ -228,17 +202,15 @@ public class FileListFragment extends BaseFragment implements IMVPView {
      */
     public void refresh(){
         if(!isRefreshing){
-            readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
+//            readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
         }
-    }
-
-    private void ReadVideoDirectoryByRxjava(){
-
     }
 
     @Override
     public void getDataSuccess(List<? extends Model> data) {
-
+        Log.d("danxx" ,"getDataSuccess--->"+data.size());
+        mAdapter.setData((List<FileBean>) data);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -249,59 +221,18 @@ public class FileListFragment extends BaseFragment implements IMVPView {
 
     @Override
     public void showProgress() {
-
+        refreshLayout.setRefreshing(true);
     }
 
     @Override
     public void hideProgress() {
-
+        refreshLayout.setRefreshing(false);
     }
 
-    class ReadVideoDirectoryTask implements Runnable{
-
-        Context mContext;
-        Handler mainHandler;
-        File f;
-        public ReadVideoDirectoryTask(Context context ,Handler handler){
-            isRefreshing =true;
-            this.mContext = context;
-            this.mainHandler = handler;
-            f = Environment.getExternalStorageDirectory();
-            fileBeans.clear();
-            refreshLayout.setRefreshing(true);
-        }
-        @Override
-        public void run() {
-            eachAllMedias(f);
-            Log.d("danxx" ,"文件读取完成");
-            Message msg = mainHandler.obtainMessage(MSG_READ_FINISH);
-            msg.sendToTarget();
-        }
-
-        /** 遍历所有文件夹，查找出视频文件 */
-        private void eachAllMedias(File f) {
-            if (f != null && f.exists() && f.isDirectory()) {
-                File[] files = f.listFiles();
-                /**文件夹里视频数量**/
-                int videoCount = 0;
-                if (files != null) { //文件夹里面存在文件或者文件夹
-                    for (File file : f.listFiles()) {
-                        if (file.isDirectory()) {
-                            eachAllMedias(file);
-                        } else if (file.exists() && file.canRead() && FileUtils.isVideo(file)) {
-                            videoCount++;
-                            Log.d("danxx" ,"videoCount-->"+videoCount);
-                        }
-                    }
-                    /**当前文件夹下包含有视频**/
-                    if(videoCount > 0){
-                        fileBeans.add(new FileBean(f.getPath() ,f.getName(),videoCount));
-                    }
-                }
-            }else{
-                Log.d("danxx" ,"目录直接为空");
-            }
-        }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        videoFilePresenter.detachView();
     }
 
     class FileListAdapter extends BaseRecyclerViewAdapter<FileBean>{

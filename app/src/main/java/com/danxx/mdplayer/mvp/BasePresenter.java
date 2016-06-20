@@ -2,6 +2,7 @@ package com.danxx.mdplayer.mvp;
 
 import android.util.Log;
 
+import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -40,6 +41,16 @@ public class BasePresenter<T extends MvpView> implements Presenter<T> {
         this.mCompositeSubscription = null;
     }
 
+    /**
+     * 添加subscriber订阅者到mCompositeSubscription，
+     * 方便在detachView的时候取消订阅，防止内存泄露
+     * @param subscriber
+     */
+    public void addSubscriberToCompositeSubscription(Subscription subscriber){
+        if(subscriber != null){
+            this.mCompositeSubscription.add(subscriber);
+        }
+    }
 
     public boolean isViewAttached() {
         return mMvpView != null;

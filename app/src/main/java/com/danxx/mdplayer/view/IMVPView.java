@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Created by Danxx on 2016/6/17.
- * 妹纸接口
+ * 接口
  */
 public interface IMVPView extends MvpView {
 
