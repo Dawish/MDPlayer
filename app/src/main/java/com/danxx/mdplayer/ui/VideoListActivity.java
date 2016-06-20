@@ -18,9 +18,12 @@ import com.danxx.mdplayer.R;
 import com.danxx.mdplayer.adapter.BaseRecyclerViewAdapter;
 import com.danxx.mdplayer.adapter.BaseRecyclerViewHolder;
 import com.danxx.mdplayer.base.BaseActivity;
+import com.danxx.mdplayer.model.Model;
 import com.danxx.mdplayer.model.VideoBean;
+import com.danxx.mdplayer.presenter.VideoFilePresenter;
 import com.danxx.mdplayer.utils.FileUtils;
 import com.danxx.mdplayer.utils.RxUtil;
+import com.danxx.mdplayer.view.IMVPView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,7 +33,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Func1;
 
-public class VideoListActivity extends BaseActivity {
+public class VideoListActivity extends BaseActivity implements IMVPView {
     private String path;
     private static final int MSG_READ_FINISH = 1;
     private VideoListAdapter mAdapter;
@@ -38,6 +41,7 @@ public class VideoListActivity extends BaseActivity {
     private RecyclerView videoListView;
     private File rootFile;
     private TextView tvFilePath;
+    private VideoFilePresenter videoFilePresenter;
 
     /**
      * 包含有视频文件夹集合
@@ -79,10 +83,13 @@ public class VideoListActivity extends BaseActivity {
      */
     @Override
     protected void initData() {
+        videoFilePresenter = new VideoFilePresenter();
+        videoFilePresenter.attachView(this);
         if (path != null && !TextUtils.isEmpty(path)) {
             tvFilePath.setText(path);
             rootFile = new File(path);
-            ReadVideoFileByRxjava();
+//            ReadVideoFileByRxjava();
+            videoFilePresenter.getVideoData(rootFile);
         }
     }
 
@@ -126,8 +133,8 @@ public class VideoListActivity extends BaseActivity {
                     public void onCompleted() {
                         Log.d("danxx", "onCompleted");
                         if (videoBeans.size() > 0) {
-                            mAdapter.setData(videoBeans);
-                            mAdapter.notifyDataSetChanged();
+//                            mAdapter.setData(videoBeans);
+//                            mAdapter.notifyDataSetChanged();
                         } else {
                             Toast.makeText(VideoListActivity.this, "sorry,没有读取到视频文件!", Toast.LENGTH_LONG).show();
                         }
@@ -147,6 +154,43 @@ public class VideoListActivity extends BaseActivity {
                     }
                 }
             );
+    }
+
+    /**
+     * 获取数据成功后回调
+     *
+     * @param data
+     */
+    @Override
+    public void getDataSuccess(List<? extends Model> data) {
+        mAdapter.setData((List<VideoBean>) data);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 获取数据失败
+     *
+     * @param e
+     */
+    @Override
+    public void getDataError(Throwable e) {
+
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        videoFilePresenter.detachView();
     }
 
     class VideoListAdapter extends BaseRecyclerViewAdapter<VideoBean> {

@@ -4,11 +4,13 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.danxx.mdplayer.model.FileBean;
+import com.danxx.mdplayer.model.VideoBean;
 import com.danxx.mdplayer.mvp.BasePresenter;
 import com.danxx.mdplayer.utils.FileUtils;
 import com.danxx.mdplayer.view.IMVPView;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,10 @@ import rx.schedulers.Schedulers;
 public class VideoFilePresenter extends BasePresenter<IMVPView> {
     /**包含有视频文件夹集合**/
     private List<FileBean> fileBeans = new ArrayList<FileBean>();
+    /**
+     * 某一个文件夹中所有的视频文件
+     **/
+    private List<VideoBean> videoBeans = new ArrayList<VideoBean>();
     private List<File> files = new ArrayList<File>();
     /**
      * 获取所有包含视频的文件
@@ -64,6 +70,7 @@ public class VideoFilePresenter extends BasePresenter<IMVPView> {
                             public void onNext(File file) {
                                 /**将遍历得到的所有视频文件存放在list中**/
                                 files.add(file);
+//                                addFile(file);
                             }
                         }
                 )
@@ -102,6 +109,7 @@ public class VideoFilePresenter extends BasePresenter<IMVPView> {
                 public void onError(Throwable e) {
                     if(VideoFilePresenter.this.getMvpView() != null){
                         VideoFilePresenter.this.getMvpView().getDataError(e);
+                        VideoFilePresenter.this.getMvpView().hideProgress();
                     }
                 }
 
@@ -113,6 +121,8 @@ public class VideoFilePresenter extends BasePresenter<IMVPView> {
                         @Override
                         public void onCompleted() {
                             fileBeans.add(new FileBean(String.valueOf(fileGroupedObservable.getKey()), parentName, count));
+                            count = 0;
+                            parentName = null;
                         }
 
                         @Override
@@ -170,7 +180,45 @@ public class VideoFilePresenter extends BasePresenter<IMVPView> {
      * @param directory
      */
     public void getVideoData(File directory){
+        if(VideoFilePresenter.this.getMvpView() != null){
+            VideoFilePresenter.this.getMvpView().showProgress();
+        }
+        if( directory != null && directory.isDirectory()){
+            this.addSubscriberToCompositeSubscription(
+                    Observable.from(directory.listFiles(new FileFilter() {
+                        @Override
+                        public boolean accept(File f) {
+                            return f.exists() && f.canRead() && FileUtils.isVideo(f);
+                        }
+                    })).subscribe(
+                            new Subscriber<File>() {
+                                @Override
+                                public void onCompleted() {
+                                    if(VideoFilePresenter.this.getMvpView() != null){
+                                        VideoFilePresenter.this.getMvpView().getDataSuccess(videoBeans);
+                                        VideoFilePresenter.this.getMvpView().hideProgress();
+                                    }
+                                }
 
+                                @Override
+                                public void onError(Throwable e) {
+                                    if(VideoFilePresenter.this.getMvpView() != null){
+                                        VideoFilePresenter.this.getMvpView().getDataError(e);
+                                        VideoFilePresenter.this.getMvpView().hideProgress();
+                                    }
+                                }
+
+                                @Override
+                                public void onNext(File file) {
+                                    String name = file.getName();
+                                    String size = FileUtils.showFileSize(file.length());
+                                    String path = file.getPath();
+                                    videoBeans.add(new VideoBean(name, path, size));
+                                }
+                            }
+                    )
+            );
+        }
     }
     /**
      * rxjava递归查询内存中的视频文件
