@@ -36,12 +36,36 @@
 - `BaseActivity`、`BaseFragment`、`BaseRecyclerViewAdapter`和`BaseRecyclerViewHolder`的封装。
 - Material Design和android5.0以后的新控件使用
 
-### 4.知识点引导：
+### 4.依赖库：
+```  java
+    //FloatingActionMenu
+    compile 'com.github.clans:fab:1.6.4'
+    //retrofit
+    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
+    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
+    compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
+    //Rxjava + Rxandroid
+    compile 'io.reactivex:rxandroid:1.2.0'
+    compile 'io.reactivex:rxjava:1.1.5'
+    //blurview
+    compile 'com.eightbitlab:blurview:1.0.2'
+    //photoview
+    compile 'com.bm.photoview:library:1.4.0'
+    //picasso
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    //umeng
+    compile 'com.umeng.analytics:analytics:latest.integration'
+```
+
+### 5.APK下载：
+上架中...
+
+### 6.知识点引导：
 - ijkplayer-android在ubuntu下编译请看我的文章：[http://blog.csdn.net/u010072711/article/details/51438871](http://blog.csdn.net/u010072711/article/details/51438871)
 - Rxjava入门引导请看：[http://blog.csdn.net/u010072711/article/details/51590553](http://blog.csdn.net/u010072711/article/details/51590553)
 - Android MVP+Retrofit+RxJava实践小结：[http://wuxiaolong.me/2016/06/12/mvpRetrofitRxjava/](http://wuxiaolong.me/2016/06/12/mvpRetrofitRxjava/)
 
-### 5.下版本改进
+### 7.下版本改进
 - 下版本希望改进model层，对数据操作更加简洁
 - 增加视频播放历史记录
 - 自定义视频播控
