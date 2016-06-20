@@ -1,13 +1,17 @@
 package com.danxx.mdplayer.presenter;
 
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.danxx.mdplayer.model.CacheManager;
 import com.danxx.mdplayer.model.FileBean;
 import com.danxx.mdplayer.model.VideoBean;
 import com.danxx.mdplayer.mvp.BasePresenter;
 import com.danxx.mdplayer.utils.FileUtils;
 import com.danxx.mdplayer.view.IMVPView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -25,6 +29,10 @@ import rx.schedulers.Schedulers;
  * Created by Dawish on 2016/6/19.
  */
 public class VideoFilePresenter extends BasePresenter<IMVPView> {
+    private static final String cacheKey = "fileBeansCacheData";
+    private String cacheStr = "";
+    private boolean inited = false;
+    private Gson gson = new Gson();
     /**包含有视频文件夹集合**/
     private List<FileBean> fileBeans = new ArrayList<FileBean>();
     /**
@@ -34,10 +42,36 @@ public class VideoFilePresenter extends BasePresenter<IMVPView> {
     private List<File> files = new ArrayList<File>();
     /**
      * 获取所有包含视频的文件
+     * @param isRefresh 是否为下拉刷新
      */
-    public void getFileData(){
-        if(VideoFilePresenter.this.getMvpView() != null){
-            VideoFilePresenter.this.getMvpView().showProgress();
+    public void getFileData(boolean isRefresh){
+        fileBeans.clear();
+        files.clear();
+        cacheStr = CacheManager.getInstance().getAsString(cacheKey);
+        if(isRefresh){
+            cacheStr = null;
+        }
+        /**如果有缓存数据那就先显示缓存数据**/
+        if(cacheStr != null && !TextUtils.isEmpty(cacheStr)){
+            Gson gson = new Gson();
+            // json转为带泛型的list
+            List<FileBean> dataList = gson.fromJson(cacheStr,
+                    new TypeToken<List<FileBean>>() {
+                    }.getType());
+            if(dataList.size()>0){
+                if(VideoFilePresenter.this.getMvpView() != null){
+                    VideoFilePresenter.this.getMvpView().getDataSuccess(dataList);
+                    inited = true;
+                    VideoFilePresenter.this.getMvpView().hideProgress();
+                }
+            }else{
+                inited = false;
+            }
+        }else{
+            inited = false;
+            if(VideoFilePresenter.this.getMvpView() != null){
+                VideoFilePresenter.this.getMvpView().showProgress();
+            }
         }
         File rootFile = Environment.getExternalStorageDirectory();
         if(rootFile != null){
@@ -99,9 +133,23 @@ public class VideoFilePresenter extends BasePresenter<IMVPView> {
                 @Override
                 public void onCompleted() {
                     Log.d("danxx", "groupBy onCompleted");
-                    if(VideoFilePresenter.this.getMvpView() != null){
-                        VideoFilePresenter.this.getMvpView().getDataSuccess(fileBeans);
-                        VideoFilePresenter.this.getMvpView().hideProgress();
+                    if(!inited){
+                        if(VideoFilePresenter.this.getMvpView() != null){
+                            VideoFilePresenter.this.getMvpView().getDataSuccess(fileBeans);
+                            VideoFilePresenter.this.getMvpView().hideProgress();
+                            inited = true;
+                        }
+                        String cacheStr = gson.toJson(fileBeans);
+                        if(!TextUtils.isEmpty(cacheStr)){
+                            CacheManager.getInstance().remove(cacheKey);
+                            CacheManager.getInstance().put(cacheKey, cacheStr);
+                        }
+                    }else{
+                        String cacheStr = gson.toJson(fileBeans);
+                        if(!TextUtils.isEmpty(cacheStr)){
+                            CacheManager.getInstance().remove(cacheKey);
+                            CacheManager.getInstance().put(cacheKey ,cacheStr);
+                        }
                     }
                 }
 

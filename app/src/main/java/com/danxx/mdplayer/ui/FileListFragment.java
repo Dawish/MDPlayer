@@ -6,13 +6,11 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -24,14 +22,11 @@ import com.danxx.mdplayer.R;
 import com.danxx.mdplayer.adapter.BaseRecyclerViewAdapter;
 import com.danxx.mdplayer.adapter.BaseRecyclerViewHolder;
 import com.danxx.mdplayer.base.BaseFragment;
-import com.danxx.mdplayer.model.CacheManager;
 import com.danxx.mdplayer.model.FileBean;
 import com.danxx.mdplayer.model.Model;
 import com.danxx.mdplayer.presenter.VideoFilePresenter;
 import com.danxx.mdplayer.view.IMVPView;
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
@@ -41,27 +36,20 @@ import java.util.List;
 public class FileListFragment extends BaseFragment implements IMVPView {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final int MSG_READ_FINISH = 1;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private static final String cacheKey = "MDPlayerCacheData";
     private LinearLayoutManager mLayoutManager;
     private FileListAdapter mAdapter;
     private View rootView;
     private RecyclerView filesListView;
     private FloatingActionMenu FAM;
-    private String tempStr;
     private boolean isRefreshing;
     private int mScrollThreshold = 4;
     private VideoFilePresenter videoFilePresenter;
 
     private SwipeRefreshLayout refreshLayout;
-
-    /**包含有视频文件夹集合**/
-    private HandlerThread handlerThread;
-    private Handler readTaskHandler;
     /**
      */
     public static FileListFragment newInstance(String param1, String param2) {
@@ -80,15 +68,6 @@ public class FileListFragment extends BaseFragment implements IMVPView {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        if(handlerThread == null){
-            handlerThread = new HandlerThread("handlerThread");
-        }
-        handlerThread.start();
-        if(readTaskHandler == null){
-            readTaskHandler = new Handler(handlerThread.getLooper());
-        }
-//        readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
-        tempStr = CacheManager.getInstance().getAsString(cacheKey);
     }
 
     @Override
@@ -114,7 +93,7 @@ public class FileListFragment extends BaseFragment implements IMVPView {
         refreshLayout.setProgressViewOffset(true, 0, (int) TypedValue
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 28, getResources()
                         .getDisplayMetrics()));
-        refreshLayout.setProgressViewEndTarget(true, 200);
+        refreshLayout.setProgressViewEndTarget(false, 200);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -140,6 +119,7 @@ public class FileListFragment extends BaseFragment implements IMVPView {
             @Override
             public void onRefresh() {
 //                readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
+                refresh();
             }
         });
         // recyclerView滚动FloatingActionMenu显示隐藏监听
@@ -173,23 +153,9 @@ public class FileListFragment extends BaseFragment implements IMVPView {
 
     @Override
     protected void initDatas() {
-        /**如果有缓存数据那就先显示缓存数据**/
-        if(tempStr != null && !TextUtils.isEmpty(tempStr)){
-            Gson gson = new Gson();
-            // json转为带泛型的list
-            List<FileBean> dataList = gson.fromJson(tempStr,
-                    new TypeToken<List<FileBean>>() {
-                    }.getType());
-            if(dataList.size()>0){
-//                mAdapter.setData(dataList);
-//                mAdapter.notifyDataSetChanged();
-            }
-        }else{
-//            readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
-        }
         videoFilePresenter = new VideoFilePresenter();
         videoFilePresenter.attachView(this);
-        videoFilePresenter.getFileData();
+        videoFilePresenter.getFileData(false);
     }
 
     public void closeFAM(){
@@ -202,7 +168,7 @@ public class FileListFragment extends BaseFragment implements IMVPView {
      */
     public void refresh(){
         if(!isRefreshing){
-//            readTaskHandler.post(new ReadVideoDirectoryTask(getActivity(), mainHandler));
+            videoFilePresenter.getFileData(true);
         }
     }
 
@@ -211,6 +177,7 @@ public class FileListFragment extends BaseFragment implements IMVPView {
         Log.d("danxx" ,"getDataSuccess--->"+data.size());
         mAdapter.setData((List<FileBean>) data);
         mAdapter.notifyDataSetChanged();
+        showToast("读取到了"+data.size()+"个目录");
     }
 
     @Override
@@ -221,11 +188,13 @@ public class FileListFragment extends BaseFragment implements IMVPView {
 
     @Override
     public void showProgress() {
+        isRefreshing  = true;
         refreshLayout.setRefreshing(true);
     }
 
     @Override
     public void hideProgress() {
+        isRefreshing = false;
         refreshLayout.setRefreshing(false);
     }
 
