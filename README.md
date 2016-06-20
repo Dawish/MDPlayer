@@ -32,6 +32,7 @@
 - `ijkplayer-android` 编译封装和集成
 - MVP架构，虽然我的这个app不是很复杂，但是大概的MVP是有的，首先我承认我的Model层写得不是很好。
 - 可以学习到Rxjava的使用，使用Rxjava递归读取内存所有的视频文件并分类，可以学习到`just`、`from`、`flatMap`、`groupBy`、`filter`等Rxjava操作符，相对别的app我用到的操作符相对还算多的。
+- 学习到retrofit2.0的使用，结合Rxjava做网络请求。
 - 离线缓存，可以学习到离线数据缓存策略，以及缓存工具的使用。
 - `BaseActivity`、`BaseFragment`、`BaseRecyclerViewAdapter`和`BaseRecyclerViewHolder`的封装。
 - Material Design和android5.0以后的新控件使用
