@@ -2,11 +2,14 @@ package com.danxx.mdplayer.ui;
 
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
@@ -16,6 +19,8 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.danxx.mdplayer.R;
@@ -26,6 +31,7 @@ import com.danxx.mdplayer.model.FileBean;
 import com.danxx.mdplayer.model.Model;
 import com.danxx.mdplayer.presenter.VideoFilePresenter;
 import com.danxx.mdplayer.view.IMVPView;
+import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.List;
@@ -48,7 +54,7 @@ public class FileListFragment extends BaseFragment implements IMVPView {
     private boolean isRefreshing;
     private int mScrollThreshold = 4;
     private VideoFilePresenter videoFilePresenter;
-
+    private FloatingActionButton menuHistory,menuNetwork;
     private SwipeRefreshLayout refreshLayout;
     /**
      */
@@ -81,6 +87,9 @@ public class FileListFragment extends BaseFragment implements IMVPView {
         filesListView = (RecyclerView) rootView.findViewById(R.id.filesListview);
         FAM = (FloatingActionMenu) rootView.findViewById(R.id.FAM);
         FAM.hideMenu(false);
+        menuHistory = (FloatingActionButton) contentView.findViewById(R.id.menuHistory);
+        menuNetwork = (FloatingActionButton) contentView.findViewById(R.id.menuNetwork);
+
         mAdapter = new FileListAdapter();
         mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
@@ -147,6 +156,27 @@ public class FileListFragment extends BaseFragment implements IMVPView {
                         }
                     }
                 }
+            }
+        });
+        menuNetwork.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final AppCompatEditText editText = new AppCompatEditText(getActivity());
+                editText.setHint("请输入视频播放地址");
+                new AlertDialog.Builder(getActivity()).setView(editText)
+                    .setPositiveButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .setMessage("打开网络视频").setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        showToast(editText.getText().toString());
+                        dialogInterface.dismiss();
+                    }
+                }).show();
             }
         });
     }

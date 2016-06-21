@@ -62,7 +62,7 @@
         fab:menu_fab_hide_animation="@anim/hide_to_bottom">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/menu_item2"
+            android:id="@+id/menuHistory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/fab_add"
@@ -70,7 +70,7 @@
             style="@style/MenuButtonsSmall"
             fab:fab_label="历史" />
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/menu_item1"
+            android:id="@+id/menuNetwork"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/fab_add"
