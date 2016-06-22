@@ -51,4 +51,35 @@
         <item name="fab_colorPressed">@color/fab_pressed_son</item>
         <item name="fab_colorRipple">#99FFFFFF</item>
     </style>
+
+    <style name="MediaButtonCompat">
+        <item name="android:background">@null</item>
+        <item name="android:layout_width">71dip</item>
+        <item name="android:layout_height">52dip</item>
+    </style>
+
+    <style name="MediaButtonCompat.Previous">
+        <item name="android:src">@mipmap/vvc_ic_media_previous</item>
+    </style>
+
+    <style name="MediaButtonCompat.Next">
+        <item name="android:src">@mipmap/vvc_ic_media_next</item>
+    </style>
+
+    <style name="MediaButtonCompat.Play">
+        <item name="android:src">@mipmap/vvc_ic_media_play</item>
+    </style>
+
+    <style name="MediaButtonCompat.Ffwd">
+        <item name="android:src">@mipmap/vvc_ic_media_ff</item>
+    </style>
+
+    <style name="MediaButtonCompat.Rew">
+        <item name="android:src">@mipmap/vvc_ic_media_rew</item>
+    </style>
+
+    <style name="MediaButtonCompat.Pause">
+        <item name="android:src">@mipmap/vvc_ic_media_pause</item>
+    </style>
+
 </resources>

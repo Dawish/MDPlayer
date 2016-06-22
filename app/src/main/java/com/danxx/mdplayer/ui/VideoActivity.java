@@ -23,8 +23,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -40,7 +38,7 @@ import android.widget.TextView;
 import com.danxx.mdplayer.R;
 import com.danxx.mdplayer.application.Settings;
 import com.danxx.mdplayer.module.RecentMediaStorage;
-import com.danxx.mdplayer.widget.media.AndroidMediaController;
+import com.danxx.mdplayer.widget.media.CustomMediaController;
 import com.danxx.mdplayer.widget.media.IjkVideoView;
 import com.danxx.mdplayer.widget.media.MeasureHelper;
 
@@ -53,7 +51,8 @@ public class VideoActivity extends AppCompatActivity implements TracksFragment.I
     private String mVideoPath;
     private Uri    mVideoUri;
 
-    private AndroidMediaController mMediaController;
+//    private AndroidMediaController mMediaController;
+    private CustomMediaController customMediaController;
     private IjkVideoView mVideoView;
     private TextView mToastTextView;
     private TableLayout mHudView;
@@ -122,8 +121,11 @@ public class VideoActivity extends AppCompatActivity implements TracksFragment.I
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
-        mMediaController = new AndroidMediaController(this, false);
-        mMediaController.setSupportActionBar(actionBar);
+//        mMediaController = new AndroidMediaController(this, false);
+//        mMediaController.setSupportActionBar(actionBar);
+        customMediaController = new CustomMediaController(this, false);
+        customMediaController.setSupportActionBar(actionBar);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         mToastTextView = (TextView) findViewById(R.id.toast_text_view);
         mHudView = (TableLayout) findViewById(R.id.hud_view);
@@ -137,7 +139,7 @@ public class VideoActivity extends AppCompatActivity implements TracksFragment.I
         IjkMediaPlayer.native_profileBegin("libijkplayer.so");
 
         mVideoView = (IjkVideoView) findViewById(R.id.video_view);
-        mVideoView.setMediaController(mMediaController);
+        mVideoView.setMediaController(customMediaController);
         mVideoView.setHudView(mHudView);
         // prefer mVideoPath
         if (mVideoPath != null)
@@ -155,7 +157,7 @@ public class VideoActivity extends AppCompatActivity implements TracksFragment.I
     @Override
     public void onBackPressed() {
         mBackPressed = true;
-
+        finish();
         super.onBackPressed();
     }
 
@@ -186,40 +188,50 @@ public class VideoActivity extends AppCompatActivity implements TracksFragment.I
             int aspectRatio = mVideoView.toggleAspectRatio();
             String aspectRatioText = MeasureHelper.getAspectRatioText(this, aspectRatio);
             mToastTextView.setText(aspectRatioText);
-            mMediaController.showOnce(mToastTextView);
+            customMediaController.showOnce(mToastTextView);
             return true;
-        } else if (id == R.id.action_toggle_player) {
-            int player = mVideoView.togglePlayer();
-            String playerText = IjkVideoView.getPlayerText(this, player);
-            mToastTextView.setText(playerText);
-            mMediaController.showOnce(mToastTextView);
-            return true;
-        } else if (id == R.id.action_toggle_render) {
-            int render = mVideoView.toggleRender();
-            String renderText = IjkVideoView.getRenderText(this, render);
-            mToastTextView.setText(renderText);
-            mMediaController.showOnce(mToastTextView);
-            return true;
-        } else if (id == R.id.action_show_info) {
-            mVideoView.showMediaInfo();
-        } else if (id == R.id.action_show_tracks) {
-            if (mDrawerLayout.isDrawerOpen(mRightDrawer)) {
-                Fragment f = getSupportFragmentManager().findFragmentById(R.id.right_drawer);
-                if (f != null) {
-                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.remove(f);
-                    transaction.commit();
-                }
-                mDrawerLayout.closeDrawer(mRightDrawer);
-            } else {
-                Fragment f = TracksFragment.newInstance();
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.right_drawer, f);
-                transaction.commit();
-                mDrawerLayout.openDrawer(mRightDrawer);
-            }
         }
-
+        /**隐藏重播选项**/
+//        else if (id == R.id.action_toggle_player) {
+//            int player = mVideoView.togglePlayer();
+//            String playerText = IjkVideoView.getPlayerText(this, player);
+//            mToastTextView.setText(playerText);
+//            customMediaController.showOnce(mToastTextView);
+//            return true;
+//        }
+        /**隐藏render选项**/
+//        else if (id == R.id.action_toggle_render) {
+//            int render = mVideoView.toggleRender();
+//            String renderText = IjkVideoView.getRenderText(this, render);
+//            mToastTextView.setText(renderText);
+//            customMediaController.showOnce(mToastTextView);
+//            return true;
+//        }
+        else if (id == R.id.action_show_info) {
+            mVideoView.showMediaInfo();
+        }
+        /**隐藏tracks选项**/
+//        else if (id == R.id.action_show_tracks) {
+//            if (mDrawerLayout.isDrawerOpen(mRightDrawer)) {
+//                Fragment f = getSupportFragmentManager().findFragmentById(R.id.right_drawer);
+//                if (f != null) {
+//                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//                    transaction.remove(f);
+//                    transaction.commit();
+//                }
+//                mDrawerLayout.closeDrawer(mRightDrawer);
+//            } else {
+//                Fragment f = TracksFragment.newInstance();
+//                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//                transaction.replace(R.id.right_drawer, f);
+//                transaction.commit();
+//                mDrawerLayout.openDrawer(mRightDrawer);
+//            }
+//        }
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

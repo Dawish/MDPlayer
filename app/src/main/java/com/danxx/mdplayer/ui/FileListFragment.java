@@ -19,8 +19,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.danxx.mdplayer.R;
@@ -161,6 +159,7 @@ public class FileListFragment extends BaseFragment implements IMVPView {
         menuNetwork.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                closeFAM();
                 final AppCompatEditText editText = new AppCompatEditText(getActivity());
                 editText.setHint("请输入视频播放地址");
                 new AlertDialog.Builder(getActivity()).setView(editText)

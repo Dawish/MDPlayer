@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layoutDirection="ltr"
+    android:paddingLeft="@dimen/d_40dp"
+    android:paddingRight="@dimen/d_40dp"
+    android:paddingBottom="@dimen/d_30dp"
+    android:background="@color/ijk_transparent_dark"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="4dip"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <ImageButton android:id="@+id/prev" style="@style/MediaButtonCompat.Previous" />
+        <ImageButton android:id="@+id/rew" style="@style/MediaButtonCompat.Rew" />
+        <ImageButton android:id="@+id/ffwd" style="@style/MediaButtonCompat.Ffwd" />
+        <ImageButton android:id="@+id/next" style="@style/MediaButtonCompat.Next" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <ImageButton android:id="@+id/pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/d_10dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            style="@style/MediaButtonCompat.Play" />
+        <TextView
+            android:id="@+id/time_current"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="top"
+            android:paddingEnd="4dip"
+            android:paddingLeft="4dip"
+            android:paddingRight="4dip"
+            android:paddingStart="4dip"
+            android:paddingTop="4dip"
+            android:textColor="@color/dim_foreground_dark"
+            android:textSize="14sp"
+            android:text="00:00" />
+
+        <SeekBar
+            android:id="@+id/mediacontroller_progress"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            style="?android:attr/progressBarStyleHorizontal" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_gravity="center_vertical"
+            android:gravity="top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="4dip"
+            android:paddingLeft="4dip"
+            android:paddingRight="4dip"
+            android:paddingStart="4dip"
+            android:paddingTop="4dip"
+            android:textColor="@color/dim_foreground_dark"
+            android:textSize="14sp"
+            android:text="23:23" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -17,7 +17,6 @@
 package com.danxx.mdplayer.widget.media;
 
 import android.view.View;
-import android.widget.MediaController;
 
 public interface IMediaController {
     void hide();
@@ -28,7 +27,7 @@ public interface IMediaController {
 
     void setEnabled(boolean enabled);
 
-    void setMediaPlayer(MediaController.MediaPlayerControl player);
+    void setMediaPlayer(CustomMediaController.MediaPlayerControl player);
 
     void show(int timeout);
 

@@ -29,4 +29,6 @@
     <color name="colorOverlay">#50ffffff</color>
     <color name="transparent">#00000000</color>
 
+    <color name="dim_foreground_dark">#bebebe</color>
+
 </resources>

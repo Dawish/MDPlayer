@@ -73,6 +73,11 @@ public class AndroidMediaController extends MediaController implements IMediaCon
         mShowOnceArray.clear();
     }
 
+    @Override
+    public void setMediaPlayer(CustomMediaController.MediaPlayerControl player) {
+
+    }
+
     //----------
     // Extends
     //----------
