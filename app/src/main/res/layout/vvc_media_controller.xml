@@ -5,7 +5,7 @@
     android:layoutDirection="ltr"
     android:paddingLeft="@dimen/d_40dp"
     android:paddingRight="@dimen/d_40dp"
-    android:paddingBottom="@dimen/d_30dp"
+    android:paddingBottom="@dimen/d_26dp"
     android:background="@color/ijk_transparent_dark"
     android:orientation="vertical">
 
@@ -30,9 +30,10 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
         <ImageButton android:id="@+id/pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/d_80dp"
+            android:layout_height="@dimen/d_80dp"
             android:layout_margin="@dimen/d_10dp"
+            android:scaleType="fitXY"
             android:layout_gravity="center_vertical"
             android:gravity="center"
             style="@style/MediaButtonCompat.Play" />
