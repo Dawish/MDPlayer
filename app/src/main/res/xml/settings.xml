@@ -11,7 +11,7 @@
             android:title="@string/pref_title_enable_background_play" />
         <com.danxx.mdplayer.widget.IjkListPreference
             android:defaultValue="0"
-            android:entries="@@array/pref_entries_player"
+            android:entries="@array/pref_entries_player"
             android:entryValues="@array/pref_entry_values_player"
             android:key="@string/pref_key_player"
             android:persistent="true"

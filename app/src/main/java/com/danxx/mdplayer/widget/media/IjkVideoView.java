@@ -963,6 +963,12 @@ public class IjkVideoView extends FrameLayout implements CustomMediaController.M
         return text;
     }
 
+    /**
+     * 根据用户的设置来创建不同的播放器
+     * {@link Settings}
+     * @param playerType
+     * @return
+     */
     public IMediaPlayer createPlayer(int playerType) {
         IMediaPlayer mediaPlayer = null;
 
@@ -979,6 +985,7 @@ public class IjkVideoView extends FrameLayout implements CustomMediaController.M
             break;
             case Settings.PV_PLAYER__IjkMediaPlayer:
             default: {
+                /**根据设置来设置播放器属性**/
                 IjkMediaPlayer ijkMediaPlayer = null;
                 if (mUri != null) {
                     ijkMediaPlayer = new IjkMediaPlayer();

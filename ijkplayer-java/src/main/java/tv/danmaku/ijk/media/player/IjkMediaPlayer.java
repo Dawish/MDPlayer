@@ -824,7 +824,7 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
     {
         _setOption(category, name, value);
     }
-
+    /**播放器的设置是通过C层代码来实现的**/
     private native void _setOption(int category, String name, String value);
     private native void _setOption(int category, String name, long value);
 
