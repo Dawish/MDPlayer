@@ -65,6 +65,9 @@ import tv.danmaku.ijk.media.player.pragma.DebugLog;
 public final class IjkMediaPlayer extends AbstractMediaPlayer {
     private final static String TAG = IjkMediaPlayer.class.getName();
 
+    /**播放器拥有一个同样的ID**/
+    public static final int FULLSCREEN_ID            = 33797;
+
     private static final int MEDIA_NOP = 0; // interface test message
     private static final int MEDIA_PREPARED = 1;
     private static final int MEDIA_PLAYBACK_COMPLETE = 2;
@@ -208,7 +211,6 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
     private void initPlayer(IjkLibLoader libLoader) {
         loadLibrariesOnce(libLoader);
         initNativeOnce();
-
         Looper looper;
         if ((looper = Looper.myLooper()) != null) {
             mEventHandler = new EventHandler(this, looper);

@@ -21,4 +21,5 @@ public class Common {
     public static final String img_show = "http://www.tngou.net/tnfs/api/show";
     /**图片URL拼接前缀**/
     public static final String img_url = "http://tnfs.tngou.net/img";
+
 }

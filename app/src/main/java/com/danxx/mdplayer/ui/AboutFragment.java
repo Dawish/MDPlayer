@@ -1,10 +1,12 @@
 package com.danxx.mdplayer.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.danxx.mdplayer.R;
 
@@ -20,6 +22,7 @@ public class AboutFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private ImageView testImg;
 
     public AboutFragment() {
         // Required empty public constructor
@@ -48,7 +51,20 @@ public class AboutFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_about, container, false);
+        View contentView = inflater.inflate(R.layout.fragment_about, container, false);
+
+        testImg = (ImageView) contentView.findViewById(R.id.testImg);
+
+        testImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ScrollVideoViewActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        return contentView;
     }
+
 
 }
