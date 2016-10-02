@@ -975,7 +975,6 @@ public class IjkVideoView extends FrameLayout implements CustomMediaController.M
      */
     public IMediaPlayer createPlayer(int playerType) {
         IMediaPlayer mediaPlayer = null;
-        playerType = Settings.PV_PLAYER__IjkExoMediaPlayer;
         switch (playerType) {
             case Settings.PV_PLAYER__IjkExoMediaPlayer: {
                 IjkExoMediaPlayer IjkExoMediaPlayer = new IjkExoMediaPlayer(mAppContext);
