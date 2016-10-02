@@ -82,4 +82,21 @@
         <item name="android:src">@mipmap/vvc_ic_media_pause</item>
     </style>
 
+    <style name="AppThemeNoTitleBar" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
+    <!--播放器进度条的styles-->
+    <style name="SeekBarAppTheme">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:focusable">true</item>
+        <item name="android:progressDrawable">
+            @drawable/jky_player_progressbar
+        </item>
+        <item name="android:thumb">@drawable/ic_circles</item>
+        <item name="android:minHeight">5dip</item>
+        <item name="android:maxHeight">5dip</item>
+        <item name="android:paddingLeft">5.0dip</item>
+        <item name="android:paddingRight">5.0dip</item>
+    </style>
+    <!-- 播放器进度条end-->
 </resources>

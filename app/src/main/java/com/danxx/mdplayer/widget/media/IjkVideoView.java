@@ -71,6 +71,9 @@ public class IjkVideoView extends FrameLayout implements CustomMediaController.M
     private static final int STATE_PAUSED = 4;
     private static final int STATE_PLAYBACK_COMPLETED = 5;
 
+    public int getCurrentState() {
+        return mCurrentState;
+    }
     // mCurrentState is a VideoView object's current state.
     // mTargetState is the state that a method caller intends to reach.
     // For instance, regardless the VideoView object's current state,
@@ -292,6 +295,7 @@ public class IjkVideoView extends FrameLayout implements CustomMediaController.M
         am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
         try {
+            /***********创建对应的MediaPlayer****************/
             mMediaPlayer = createPlayer(mSettings.getPlayer());
 
             // TODO: create SubtitleController in MediaPlayer, but we need
@@ -971,16 +975,18 @@ public class IjkVideoView extends FrameLayout implements CustomMediaController.M
      */
     public IMediaPlayer createPlayer(int playerType) {
         IMediaPlayer mediaPlayer = null;
-
+        playerType = Settings.PV_PLAYER__IjkExoMediaPlayer;
         switch (playerType) {
             case Settings.PV_PLAYER__IjkExoMediaPlayer: {
                 IjkExoMediaPlayer IjkExoMediaPlayer = new IjkExoMediaPlayer(mAppContext);
                 mediaPlayer = IjkExoMediaPlayer;
+                Log.d(TAG, "create IjkExoMediaPlayer");
             }
             break;
             case Settings.PV_PLAYER__AndroidMediaPlayer: {
                 AndroidMediaPlayer androidMediaPlayer = new AndroidMediaPlayer();
                 mediaPlayer = androidMediaPlayer;
+                Log.d(TAG, "create AndroidMediaPlayer");
             }
             break;
             case Settings.PV_PLAYER__IjkMediaPlayer:
@@ -1022,6 +1028,7 @@ public class IjkVideoView extends FrameLayout implements CustomMediaController.M
                     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
                 }
                 mediaPlayer = ijkMediaPlayer;
+                Log.d(TAG, "create ijkMediaPlayer");
             }
             break;
         }
@@ -1203,5 +1210,19 @@ public class IjkVideoView extends FrameLayout implements CustomMediaController.M
 
     public int getSelectedTrack(int trackType) {
         return MediaPlayerCompat.getSelectedTrack(mMediaPlayer, trackType);
+    }
+
+
+    public void setAspectRatio(int aspectRatio) {
+        for (int i = 0; i < s_allAspectRatio.length; i++) {
+            if (s_allAspectRatio[i] == aspectRatio) {
+                mCurrentAspectRatioIndex = i;
+                mCurrentAspectRatio = s_allAspectRatio[mCurrentAspectRatioIndex];
+                if (mRenderView != null) {
+                    mRenderView.setAspectRatio(mCurrentAspectRatio);
+                }
+                break;
+            }
+        }
     }
 }

@@ -58,22 +58,14 @@
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name" />
 
-        <!-- <activity android:name=".meizhi.RxTestActivity"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-        <!-- </intent-filter> -->
-        <!-- </activity> -->
         <activity android:name=".ui.MeizhiDetailActivity"></activity>
         <activity android:name=".ui.ScrollVideoViewActivity">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
         </activity>
+
+        <activity android:name=".ui.SuperVideoDetailsActivity"
+            android:theme="@style/AppThemeNoTitleBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensor"></activity>
 
     </application>
 

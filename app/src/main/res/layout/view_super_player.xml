@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/app_video_box"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000" >
+
+    <com.danxx.mdplayer.widget.media.IjkVideoView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <include
+        android:id="@+id/view_super_player_control"
+        layout="@layout/view_super_player_control"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <!--<include layout="@layout/view_super_player_center" />
+
+    &lt;!&ndash; bottom &ndash;&gt;
+
+    <include layout="@layout/view_super_player_bottom" />
+
+    <include layout="@layout/view_super_player_top" />-->
+
+</RelativeLayout>
