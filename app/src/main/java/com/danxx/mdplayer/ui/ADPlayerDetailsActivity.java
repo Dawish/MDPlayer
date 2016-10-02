@@ -18,7 +18,7 @@ import com.danxx.mdplayer.mdplayer.MDPlayer;
  * @author Super南仔
  * @time 2016-9-19
  */
-public class SuperVideoDetailsActivity extends AppCompatActivity implements View.OnClickListener, MDPlayer.OnNetChangeListener {
+public class ADPlayerDetailsActivity extends AppCompatActivity implements View.OnClickListener, MDPlayer.OnNetChangeListener {
 
     private MDPlayer player;
     private boolean isLive;

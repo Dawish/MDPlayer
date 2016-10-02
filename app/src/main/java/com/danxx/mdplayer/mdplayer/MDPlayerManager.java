@@ -15,7 +15,7 @@ public class MDPlayerManager {
 
     }
 
-    public static MDPlayerManager getSuperManager() {
+    public static MDPlayerManager getMDManager() {
         if (videoPlayViewManage == null) {
             videoPlayViewManage = new MDPlayerManager();
         }

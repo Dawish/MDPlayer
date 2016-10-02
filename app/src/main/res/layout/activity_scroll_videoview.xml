@@ -1,46 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/videoRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <RelativeLayout
+        android:id="@+id/full_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="#000"
+        android:gravity="center"
+        android:visibility="gone" />
 
-        <TextView
-            android:layout_margin="@dimen/d_26dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/s_38sp"
-            android:text="IjkVideoView在滚动控件中测试1"/>
-
-        <com.danxx.mdplayer.widget.media.IjkVideoView
-            android:id="@+id/video_view1"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/d_480dp"
-            android:layout_margin="@dimen/d_16dp"
-            android:layout_gravity="center"></com.danxx.mdplayer.widget.media.IjkVideoView>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/d_16dp"
-            android:src="@mipmap/default_video_item_bg"/>
-
-        <TextView
-            android:layout_margin="@dimen/d_26dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/s_38sp"
-            android:text="IjkVideoView在滚动控件中测试2"/>
-
-        <com.danxx.mdplayer.widget.media.IjkVideoView
-            android:id="@+id/video_view2"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/d_480dp"
-            android:layout_margin="@dimen/d_16dp"
-            android:layout_gravity="center"></com.danxx.mdplayer.widget.media.IjkVideoView>
-    </LinearLayout>
-
-</ScrollView>
+</RelativeLayout>

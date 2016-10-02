@@ -58,7 +58,8 @@ public class AboutFragment extends Fragment {
         testImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SuperVideoDetailsActivity.class);
+//                Intent intent = new Intent(getContext(), ADPlayerDetailsActivity.class);
+                Intent intent = new Intent(getContext(), RecyclerVideoViewActivity.class);
                 startActivity(intent);
             }
         });
