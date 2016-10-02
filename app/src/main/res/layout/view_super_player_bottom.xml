@@ -2,10 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/app_video_bottom_box"
     android:layout_width="match_parent"
-    android:layout_height="45dp"
+    android:layout_height="@dimen/d_80dp"
     android:layout_alignParentBottom="true"
     android:background="#88000000"
-    android:visibility="gone" >
+
+>
 
     <LinearLayout
         android:id="@+id/view_jky_player_left"
@@ -16,10 +17,10 @@
 
         <ImageView
             android:id="@+id/app_video_play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:layout_width="@dimen/d_60dp"
+            android:layout_height="@dimen/d_60dp"
             android:layout_gravity="center"
+            android:padding="@dimen/d_12dp"
             android:src="@drawable/ic_play" />
         <TextView 
             android:id="@+id/view_jky_player_tv_number"
@@ -75,6 +76,6 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:padding="8dp"
-        android:src="@drawable/ic_enlarge" />
+        android:src="@drawable/enlarge_fullscreen" />
 
 </RelativeLayout>

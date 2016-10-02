@@ -13,7 +13,7 @@
             <shape>
                 <corners android:radius="10dip" />
 
-                <solid android:color="#ffffff" />
+                <solid android:color="@color/progressBar" />
             </shape>
         </clip>
     </item>
@@ -22,7 +22,7 @@
             <shape>
                 <corners android:radius="10dip" />
 
-                <solid android:color="#80ffffff" />
+                <solid android:color="@color/secondaryProgressBar" />
             </shape>
         </clip>
     </item>

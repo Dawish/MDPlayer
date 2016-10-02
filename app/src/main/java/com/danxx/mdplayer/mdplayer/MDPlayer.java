@@ -998,11 +998,11 @@ public class MDPlayer extends RelativeLayout {
 	private void updateFullScreenButton() {
 		if (getScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {// 全屏幕
 			$.id(R.id.view_jky_player_fullscreen).image(
-					R.drawable.ic_not_fullscreen);
+					R.drawable.shrink_fullscreen);
 			$.id(R.id.view_jky_player_iv_share).gone();
 			$.id(R.id.view_jky_play_iv_setting).visible();
 		} else {
-			$.id(R.id.view_jky_player_fullscreen).image(R.drawable.ic_enlarge);
+			$.id(R.id.view_jky_player_fullscreen).image(R.drawable.enlarge_fullscreen);
 			$.id(R.id.view_jky_player_iv_share).visible();
 			$.id(R.id.view_jky_play_iv_setting).gone();
 		}

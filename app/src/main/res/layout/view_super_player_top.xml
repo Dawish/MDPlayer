@@ -5,7 +5,8 @@
     android:layout_height="45dp"
     android:background="#88000000"
     android:orientation="horizontal"
-    android:visibility="gone" >
+
+    >
 
     <ImageView
         android:id="@+id/app_video_finish"

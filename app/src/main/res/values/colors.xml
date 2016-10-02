@@ -31,4 +31,7 @@
 
     <color name="dim_foreground_dark">#bebebe</color>
 
+    <color name="progressBar">#1C8D87</color>
+    <color name="secondaryProgressBar">#441C8D87</color>
+
 </resources>
