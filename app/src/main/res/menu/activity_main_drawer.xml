@@ -7,6 +7,10 @@
             android:icon="@drawable/file_checked"
             android:title="目录" />
         <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/about_checked"
+            android:title="在线" />
+        <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/recommend_checked"
             android:title="妹纸" />
@@ -14,10 +18,6 @@
             android:id="@+id/nav_gallery"
             android:icon="@drawable/setting_checked"
             android:title="设置" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/about_checked"
-            android:title="在线" />
     </group>
 
 <!--    <item android:title="Communicate">

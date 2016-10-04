@@ -164,11 +164,4 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if(onlineVideoFragment != null){
-            ((OnlineVideoFragment)onlineVideoFragment).doOnConfigurationChanged(newConfig);
-        }
-    }
 }

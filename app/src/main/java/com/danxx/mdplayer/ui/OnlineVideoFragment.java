@@ -194,8 +194,8 @@ public class OnlineVideoFragment extends BaseFragment {
         videoViewAdapater.setData(dataList);
         videoRecyclerView.setAdapter(videoViewAdapater);
     }
-
-    public void doOnConfigurationChanged(Configuration newConfig) {
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
         if (mdPlayer != null) {
             /**
              * 在activity中监听到横竖屏变化时调用播放器的监听方法来实现播放器大小切换
