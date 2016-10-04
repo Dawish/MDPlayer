@@ -1,6 +1,7 @@
 package com.danxx.mdplayer.ui;
 
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -18,7 +19,7 @@ import com.danxx.mdplayer.base.BaseActivity;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private Fragment listFragment ,settingsFragment ,aboutFragment ,meizhiFragment;
+    private Fragment listFragment ,settingsFragment  ,meizhiFragment, onlineVideoFragment;
 
 
     /**
@@ -40,7 +41,6 @@ public class MainActivity extends BaseActivity
     protected void initViews(Bundle savedInstanceState) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -55,16 +55,21 @@ public class MainActivity extends BaseActivity
 
         listFragment = FileListFragment.newInstance(null, null);
         settingsFragment = SettingsFragment.newInstance(null ,null);
-        aboutFragment = AboutFragment.newInstance(null ,null);
+//        aboutFragment = AboutFragment.newInstance(null ,null);
         meizhiFragment = MeizhiClassifyFragment.newInstance(null, null);
+
+        onlineVideoFragment = OnlineVideoFragment.newInstance(MainActivity.this);
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.contentLayout , listFragment ,listFragment.getClass().getSimpleName());
         transaction.add(R.id.contentLayout , settingsFragment ,settingsFragment.getClass().getSimpleName());
         transaction.hide(settingsFragment);
         transaction.add(R.id.contentLayout , meizhiFragment ,meizhiFragment.getClass().getSimpleName());
         transaction.hide(meizhiFragment);
-        transaction.add(R.id.contentLayout, aboutFragment, aboutFragment.getClass().getSimpleName());
-        transaction.hide(aboutFragment);
+
+        transaction.add(R.id.contentLayout, onlineVideoFragment, onlineVideoFragment.getClass().getSimpleName());
+        transaction.hide(onlineVideoFragment);
+
         getSupportActionBar().setTitle("目录");
         transaction.commit();
 
@@ -100,11 +105,15 @@ public class MainActivity extends BaseActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (onlineVideoFragment != null) {
+            ((OnlineVideoFragment) onlineVideoFragment).onBackPressed();
+        }
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
+
     }
 
     @Override
@@ -131,7 +140,7 @@ public class MainActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.hide(listFragment).hide(settingsFragment).hide(aboutFragment).hide(meizhiFragment);
+        transaction.hide(listFragment).hide(settingsFragment).hide(onlineVideoFragment).hide(meizhiFragment);
         if (id == R.id.nav_camera) {
             getSupportActionBar().setTitle("目录");
             transaction.show(listFragment).commit();
@@ -139,8 +148,8 @@ public class MainActivity extends BaseActivity
             getSupportActionBar().setTitle("设置");
             transaction.show(settingsFragment).commit();
         } else if (id == R.id.nav_slideshow) {
-            getSupportActionBar().setTitle("关于");
-            transaction.show(aboutFragment).commit();
+            getSupportActionBar().setTitle("在线");
+            transaction.show(onlineVideoFragment).commit();
         } else if (id == R.id.nav_manage) {
             getSupportActionBar().setTitle("妹纸");
             transaction.show(meizhiFragment).commit();
@@ -155,5 +164,11 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
-
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(onlineVideoFragment != null){
+            ((OnlineVideoFragment)onlineVideoFragment).doOnConfigurationChanged(newConfig);
+        }
+    }
 }

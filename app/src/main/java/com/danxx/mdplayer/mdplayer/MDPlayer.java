@@ -1063,6 +1063,10 @@ public class MDPlayer extends RelativeLayout {
 		videoView.pause();
 	}
 
+	/**
+	 * 当用户点击返回键时调用
+	 * @return
+     */
 	public boolean onBackPressed() {
 		if (!fullScreenOnly
 				&& getScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
