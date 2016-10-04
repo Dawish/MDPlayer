@@ -190,6 +190,7 @@ public class RecyclerVideoViewActivity extends BaseActivity {
              */
             mdPlayer.onConfigurationChanged(newConfig);
             if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                showActionBar();
                 fullScreen.setVisibility(View.GONE);
                 fullScreen.removeAllViews();
                 videoRecyclerView.setVisibility(View.VISIBLE);
@@ -213,6 +214,7 @@ public class RecyclerVideoViewActivity extends BaseActivity {
                 ViewGroup viewGroup = (ViewGroup) mdPlayer.getParent();
                 if (viewGroup == null)
                     return;
+                hideActionBar();
                 viewGroup.removeAllViews();
                 fullScreen.addView(mdPlayer);
                 fullScreen.setVisibility(View.VISIBLE);
@@ -309,6 +311,20 @@ public class RecyclerVideoViewActivity extends BaseActivity {
             return;
         }
         super.onBackPressed();
+    }
+
+    /**
+     * 隐藏ActionBar
+     */
+    private void hideActionBar(){
+        getSupportActionBar().hide();
+    }
+
+    /**
+     * 显示ActionBar
+     */
+    private void showActionBar(){
+        getSupportActionBar().show();
     }
 
 }

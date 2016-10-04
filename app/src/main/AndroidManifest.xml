@@ -62,7 +62,7 @@
 
         <!-- 限制此页面数竖屏显示 -->
         <activity android:name=".ui.RecyclerVideoViewActivity"
-            android:theme="@style/AppThemeNoTitleBar"
+
             android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection"
             android:screenOrientation="portrait">
         </activity>
