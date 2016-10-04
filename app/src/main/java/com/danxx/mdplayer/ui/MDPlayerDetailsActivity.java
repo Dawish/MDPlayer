@@ -4,8 +4,11 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -18,10 +21,12 @@ import com.danxx.mdplayer.mdplayer.MDPlayer;
  * @author Super南仔
  * @time 2016-9-19
  */
-public class ADPlayerDetailsActivity extends AppCompatActivity implements View.OnClickListener, MDPlayer.OnNetChangeListener {
+public class MDPlayerDetailsActivity extends AppCompatActivity implements View.OnClickListener, MDPlayer.OnNetChangeListener {
 
     private MDPlayer player;
     private boolean isLive;
+    private EditText videoUrl;
+    private Button playBtn;
     /**
      * 当视频窗口全屏的时候videoview的容器
      */
@@ -46,7 +51,8 @@ public class ADPlayerDetailsActivity extends AppCompatActivity implements View.O
     private void initData() {
         isLive = getIntent().getBooleanExtra("isLive", false);
         url = getIntent().getStringExtra("url");
-        url = "http://baobab.wandoujia.com/api/v1/playUrl?vid=2614&editionType=normal".trim();
+//        url = "http://baobab.wandoujia.com/api/v1/playUrl?vid=2614&editionType=normal".trim();
+        url = "http://ht.cdn.turner.com/nba/big/channels/nba_tv/2016/04/02/20160402-bop-warriors-celtics.nba_nba_1280x720.mp4".trim();
     }
 
     /**
@@ -54,6 +60,10 @@ public class ADPlayerDetailsActivity extends AppCompatActivity implements View.O
      */
     private void initView() {
         fullScreen = (FrameLayout) findViewById(R.id.full_screen);
+        videoUrl = (EditText) findViewById(R.id.videUrl);
+        videoUrl.setText(url);
+        playBtn = (Button) findViewById(R.id.playBtn);
+        playBtn.setOnClickListener(this);
         findViewById(R.id.tv_replay).setOnClickListener(this);
         findViewById(R.id.tv_play_location).setOnClickListener(this);
         findViewById(R.id.tv_play_switch).setOnClickListener(this);
@@ -99,7 +109,7 @@ public class ADPlayerDetailsActivity extends AppCompatActivity implements View.O
                  */
 
             }
-        }).setTitle(url)//设置视频的titleName
+        }).setTitle("")//设置视频的titleName
                 .play(url);//开始播放视频
         player.setScaleType(MDPlayer.SCALETYPE_FITXY);
     }
@@ -130,6 +140,13 @@ public class ADPlayerDetailsActivity extends AppCompatActivity implements View.O
             } else {
                 player.playSwitch("http://baobab.wandoujia.com/api/v1/playUrl?vid=2614&editionType=high");
             }
+        }else if(view.getId() == R.id.playBtn){
+            if(TextUtils.isEmpty(videoUrl.getText().toString())){
+                Toast.makeText(MDPlayerDetailsActivity.this, "URL地址不正确，请重试！" ,Toast.LENGTH_SHORT).show();
+                return;
+            }
+            player.pause();
+            player.play(videoUrl.getText().toString());
         }
     }
 

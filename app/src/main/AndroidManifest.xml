@@ -69,8 +69,8 @@
         </activity>
 
         <!-- 根據物理方向傳感器確定方向. 取決於用戶手持的方向, 當用戶轉動設備, 它跟隨改變 -->
-        <activity android:name=".ui.ADPlayerDetailsActivity"
-            android:theme="@style/AppThemeNoTitleBar"
+        <activity android:name=".ui.MDPlayerDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor"></activity>
 

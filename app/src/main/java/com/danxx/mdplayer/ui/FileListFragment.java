@@ -160,7 +160,9 @@ public class FileListFragment extends BaseFragment implements IMVPView {
             @Override
             public void onClick(View view) {
                 closeFAM();
-                final AppCompatEditText editText = new AppCompatEditText(getActivity());
+                Intent intent = new Intent(getContext(), MDPlayerDetailsActivity.class);
+                startActivity(intent);
+                /*final AppCompatEditText editText = new AppCompatEditText(getActivity());
                 editText.setHint("请输入视频播放地址");
                 new AlertDialog.Builder(getActivity()).setView(editText)
                     .setPositiveButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -175,7 +177,7 @@ public class FileListFragment extends BaseFragment implements IMVPView {
                         showToast(editText.getText().toString());
                         dialogInterface.dismiss();
                     }
-                }).show();
+                }).show();*/
             }
         });
     }
