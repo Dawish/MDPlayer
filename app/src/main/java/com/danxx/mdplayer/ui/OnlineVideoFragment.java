@@ -307,6 +307,14 @@ public class OnlineVideoFragment extends BaseFragment {
         return dataList;
     }
 
+    /**
+     * 暂停
+     */
+    public void pauseToPlay(){
+        if (mdPlayer != null) {
+            mdPlayer.onPause();
+        }
+    }
 
     /**
      * 下面的这几个Activity的生命状态很重要
