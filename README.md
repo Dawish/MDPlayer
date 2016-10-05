@@ -4,6 +4,10 @@
 
 
 ----------
+
+### MDPlayer 2.0最新效果图:
+![Alt text](./img/GIF_MDPlayer.gif)
+
 ### UI浏览:
 ![Alt text](./img/S60620-202934.jpg)
 ![Alt text](./img/S60620-202927.jpg)
