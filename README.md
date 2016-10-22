@@ -5,7 +5,7 @@
 
 ----------
 
-### MDPlayer 2.0最新效果图:
+### MDPlayer 2.0最新GIF效果图:
 ![Alt text](./img/GIF_MDPlayer.gif)
 
 ### UI浏览:
