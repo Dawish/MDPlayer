@@ -21,6 +21,7 @@ import com.danxx.mdplayer.model.Model;
 import com.danxx.mdplayer.presenter.MeizhiPresenter;
 import com.danxx.mdplayer.view.IMVPView;
 import com.danxx.mdplayer.widget.SpaceItemDecoration;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -157,14 +158,15 @@ public class MeizhiListFragment extends BaseFragment implements IMVPView {
          */
         @Override
         protected void bindData(BaseRecyclerViewHolder holder, int position) {
-            ImageView imageView = ((ViewHolder)holder).image;
-            Picasso.with(getActivity()).load("http://tnfs.tngou.net/image"+getItemData(position).getImg()).into(imageView);
+            SimpleDraweeView imageView = ((ViewHolder)holder).image;
+//            Picasso.with(getActivity()).load("http://tnfs.tngou.net/image"+getItemData(position).getImg()).into(imageView);
+            imageView.setImageURI("http://tnfs.tngou.net/image"+getItemData(position).getImg());
         }
         class ViewHolder extends BaseRecyclerViewHolder{
-            ImageView image;
+            SimpleDraweeView image;
             public ViewHolder(View itemView) {
                 super(itemView);
-                image = (ImageView) itemView.findViewById(R.id.img);
+                image = (SimpleDraweeView) itemView.findViewById(R.id.img);
             }
 
             @Override
