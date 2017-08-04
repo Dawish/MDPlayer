@@ -21,6 +21,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.google.android.exoplayer:exoplayer:r1.5.7'
 }
 
 ext {

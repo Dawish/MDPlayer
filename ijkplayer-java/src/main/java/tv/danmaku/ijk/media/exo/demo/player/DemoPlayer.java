@@ -15,6 +15,11 @@
  */
 package tv.danmaku.ijk.media.exo.demo.player;
 
+import android.media.MediaCodec.CryptoException;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.Surface;
+
 import com.google.android.exoplayer.CodecCounters;
 import com.google.android.exoplayer.DummyTrackRenderer;
 import com.google.android.exoplayer.ExoPlaybackException;
@@ -42,11 +47,6 @@ import com.google.android.exoplayer.upstream.BandwidthMeter;
 import com.google.android.exoplayer.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer.util.DebugTextViewHelper;
 import com.google.android.exoplayer.util.PlayerControl;
-
-import android.media.MediaCodec.CryptoException;
-import android.os.Handler;
-import android.os.Looper;
-import android.view.Surface;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -93,7 +93,7 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
     void onStateChanged(boolean playWhenReady, int playbackState);
     void onError(Exception e);
     void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees,
-        float pixelWidthHeightRatio);
+                            float pixelWidthHeightRatio);
   }
 
   /**
@@ -124,11 +124,11 @@ public class DemoPlayer implements ExoPlayer.Listener, ChunkSampleSource.EventLi
     void onDroppedFrames(int count, long elapsed);
     void onBandwidthSample(int elapsedMs, long bytes, long bitrateEstimate);
     void onLoadStarted(int sourceId, long length, int type, int trigger, Format format,
-        long mediaStartTimeMs, long mediaEndTimeMs);
+                       long mediaStartTimeMs, long mediaEndTimeMs);
     void onLoadCompleted(int sourceId, long bytesLoaded, int type, int trigger, Format format,
-        long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs);
+                         long mediaStartTimeMs, long mediaEndTimeMs, long elapsedRealtimeMs, long loadDurationMs);
     void onDecoderInitialized(String decoderName, long elapsedRealtimeMs,
-        long initializationDurationMs);
+                              long initializationDurationMs);
     void onAvailableRangeChanged(int sourceId, TimeRange availableRange);
   }
 

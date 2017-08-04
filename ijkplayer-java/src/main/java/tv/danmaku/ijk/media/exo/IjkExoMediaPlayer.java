@@ -29,7 +29,6 @@ import java.util.Map;
 
 import tv.danmaku.ijk.media.exo.demo.EventLogger;
 import tv.danmaku.ijk.media.exo.demo.player.DemoPlayer;
-import tv.danmaku.ijk.media.exo.demo.player.DemoPlayer.RendererBuilder;
 import tv.danmaku.ijk.media.exo.demo.player.ExtractorRendererBuilder;
 import tv.danmaku.ijk.media.player.AbstractMediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
@@ -50,7 +49,7 @@ public class IjkExoMediaPlayer extends AbstractMediaPlayer {
     public static final int TYPE_HLS = 2;
     public static final int TYPE_OTHER = 3;
 
-    private RendererBuilder mRendererBuilder;
+    private DemoPlayer.RendererBuilder mRendererBuilder;
 
     public IjkExoMediaPlayer(Context context) {
         mAppContext = context.getApplicationContext();
