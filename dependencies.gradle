@@ -7,6 +7,7 @@ def butterKnifeVersion = "8.5.1"
 def daggerVersion = "2.8"
 def ormLiteVersion = "4.48"
 def fastJsonVersion = "1.1.60.android"
+def routerVersion = "0.2.3"
 
 project.ext {
     android = [
@@ -24,8 +25,9 @@ project.ext {
             "support-v4"                  : "com.android.support:support-v4:${supportVersion}",
             "appcompat-v7"                : "com.android.support:appcompat-v7:${supportVersion}",
             "design"                      : "com.android.support:design:${supportVersion}",
-            "recyclerview"                : "com.android.support:recyclerview-v7:${supportVersion}",
-            "cardview"                    : "com.android.support:cardview-v7:${supportVersion}",
+            "recyclerview-v7"                : "com.android.support:recyclerview-v7:${supportVersion}",
+            "cardview-v7"                    : "com.android.support:cardview-v7:${supportVersion}",
+            "constraint-layout"           : "com.android.support.constraint:constraint-layout:1.0.0-alpha7",
 
             //java8-support
             "stream"                      : "com.annimon:stream:1.0.8",
@@ -50,12 +52,20 @@ project.ext {
             "stetho"                      : "com.facebook.stetho:stetho:${stethoVersion}",
             "stetho-okhttp3"              : "com.facebook.stetho:stetho-okhttp3:${stethoVersion}",
 
+            //router
+            "router"                      : "com.baronzhang.android:router:${routerVersion}",
+            "router-compiler"             : "com.baronzhang.android:router-compiler:${routerVersion}",
+
+            //butterKnife
+            "butterknife"                 : "com.jakewharton:butterknife:${butterKnifeVersion}",
+            "butterknife-compiler"        : "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
+
             //others
             "okhttp3-logging-interceptor" : "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}",
             "ormlite-android"             : "com.j256.ormlite:ormlite-android:${ormLiteVersion}",
             "fastjson"                    : "com.alibaba:fastjson:${fastJsonVersion}",
-            "butterknife"                 : "com.jakewharton:butterknife:${butterKnifeVersion}",
-            "butterknife-compiler"        : "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
-            "retrofit2-fastjson-converter": "com.github.BaronZ88:Retrofit2-FastJson-Converter:1.2"
+            "retrofit2-fastjson-converter": "com.github.BaronZ88:Retrofit2-FastJson-Converter:1.2",
+            //test
+            "junit"                       : "junit:junit:4.12",
     ]
 }

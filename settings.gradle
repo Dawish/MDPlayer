@@ -1,1 +1,1 @@
-include ':app', ':ijkplayer-java'
+include ':app', ':ijkplayer-java', ':CommonBusiness'
