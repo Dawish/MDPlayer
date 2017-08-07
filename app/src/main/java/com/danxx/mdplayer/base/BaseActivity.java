@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
 
+import butterknife.ButterKnife;
+
 /**
  * Created by Danxx on 2016/6/15.
  * 基本Activity
@@ -24,6 +26,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         getWindow().setEnterTransition(new Explode().setDuration(800));
         this.setContentView(this.getLayoutId());
+        ButterKnife.bind(BaseActivity.this);
         this.initToolbar(savedInstanceState);
         this.initViews(savedInstanceState);
         this.initData();
@@ -82,6 +85,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onPause();
         MobclickAgent.onPause(this);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {

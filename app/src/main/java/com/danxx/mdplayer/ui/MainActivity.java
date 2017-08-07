@@ -14,14 +14,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 
 import com.danxx.mdplayer.R;
 import com.danxx.mdplayer.base.BaseActivity;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private Fragment listFragment ,settingsFragment  ,meizhiFragment, onlineVideoFragment;
-
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     /**
      * Fill in layout id
@@ -40,7 +45,6 @@ public class MainActivity extends BaseActivity
      */
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
